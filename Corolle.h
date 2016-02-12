@@ -5,15 +5,16 @@
 #ifndef COROLLE_H
 #define COROLLE_H
 
-#include "Piece.h"
+#include "Piece/Piece.h"
 
-class Corolle {
+class Corolle
+{
 private:
     Piece pieces[];
     int rotation;
     int hamming;
-public:
 
+public:
 
 // Getters and Setters
     void setHamming(int hamming);
@@ -26,7 +27,7 @@ public:
 
     void setPieces(Piece *pieces);
 
-    Piece[] getPieces() const;
+    Piece[]getPieces() const;
 };
 
 
