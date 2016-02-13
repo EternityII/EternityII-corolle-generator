@@ -12,6 +12,7 @@ class Corolle
 private:
     Piece pieces[];
     int rotation;
+    int type;
     int hamming;
 
 public:
