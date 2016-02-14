@@ -6,7 +6,8 @@
 #define JEU_H
 
 
-#include "Piece.h"
+
+#include "Piece/Piece.h"
 
 class Jeu {
 private:

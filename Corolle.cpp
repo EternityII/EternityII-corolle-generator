@@ -5,33 +5,54 @@
 #include "Corolle.h"
 
 
-// Getter and Setters
-Piece[]Corolle::getPieces() const
+Corolle::Corolle(const Piece *pieces, const int size, const int type, const int hamming)
 {
-    return pieces;
-}
+    this->pieces = new Piece[size];
 
-void Corolle::setPieces(Piece *pieces)
-{
-    this->pieces = pieces;
-}
+    for (int i = 0; i < size; ++i)
+    {
+        this->pieces[i] = pieces[i];
+    }
 
-int Corolle::getRotation() const
-{
-    return rotation;
-}
-
-void Corolle::setRotation(int rotation)
-{
-    this->rotation = rotation;
-}
-
-int Corolle::getHamming() const
-{
-    return hamming;
-}
-
-void Corolle::setHamming(int hamming)
-{
+    this->size = size;
+    this->type = type;
     this->hamming = hamming;
 }
+
+Corolle::Corolle(const Corolle corolle)
+{
+    this->Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
+}
+
+
+// Getter and Setters
+
+const Piece *Corolle::getPieces() const
+{ return this->pieces; }
+
+const int Corolle::getRotation() const
+{ return rotation; }
+
+const int Corolle::getHamming() const
+{ return hamming; }
+
+const int Corolle::getType() const
+{ return type; }
+
+const int Corolle::getSize() const
+{ return size; }
+
+void Corolle::setPieces(Piece *pieces)
+{ this->pieces = pieces; }
+
+void Corolle::setRotation(int rotation)
+{ this->rotation = rotation; }
+
+void Corolle::setHamming(int hamming)
+{ this->hamming = hamming; }
+
+void Corolle::setType(int type)
+{ this->type = type; }
+
+void Corolle::setSize(int size)
+{ this->size = size; }
