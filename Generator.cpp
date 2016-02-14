@@ -42,4 +42,5 @@ void Generator::initGeneration(int type_corolle) const
 const void Generator::generationRecursive(int *disponibles, int position, int size) const
 {
     // TODO
+
 }
