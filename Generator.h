@@ -15,8 +15,6 @@ public:
 
     void initGeneration(int corolle_type);
 
-    void generationRecursive(Piece piece_tab[], int position);
-
     const bool compareColors(Piece a, Piece b, int orientation_a, int position_b) const;
 
     void prerequisGeneration(int corolle_type);

@@ -4,15 +4,11 @@
 
 #include "Corolle.h"
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
 using namespace std;
 
 Corolle::Corolle()
-{   
-    this->pieces = NULL
+{
+    this->pieces = NULL;
     this->size = 4;
     this->type = 1;
     this->hamming = 1;
@@ -22,8 +18,7 @@ Corolle::Corolle(const Piece *pieces, const int size, const int type, const int 
 {
     this->pieces = new Piece[size];
 
-    for (int i = 0; i < size; ++i)
-    {
+    for (int i = 0; i < size; ++i) {
         this->pieces[i] = pieces[i];
     }
 
@@ -35,6 +30,15 @@ Corolle::Corolle(const Piece *pieces, const int size, const int type, const int 
 Corolle::Corolle(const Corolle corolle)
 {
     this->Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
+}
+
+string Corolle::toStringCorolle()
+{
+    ostringstream output;
+    for (int i = 0; i < size; ++i) {
+        output << pieces[i] << " ";
+    }
+    return output.str();
 }
 
 
@@ -69,13 +73,3 @@ void Corolle::setType(int type)
 
 void Corolle::setSize(int size)
 { this->size = size; }
-
-string Corolle::toStringCorolle()
-{
-	ostringstream output;
-	for (int i = 0; i < size; ++i)
-    {
-        output << pieces[i] << ";";
-    } 
-    return output.str();
-}

@@ -9,9 +9,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+
 using namespace std;
 
-#include "Piece/Piece.h"
+#include "Piece.h"
 
 class Corolle
 {
@@ -34,7 +35,7 @@ public:
     static const int SIZE_B_1 = 4;
     static const int SIZE_I_1 = 5;
 
-	Corolle();
+    Corolle();
 
     Corolle(const Piece pieces[], const int size, const int type, const int hamming);
 
@@ -65,7 +66,7 @@ public:
 
     const int getSize() const;
 
-	string toStringCorolle();
+    string toStringCorolle();
 };
 
 

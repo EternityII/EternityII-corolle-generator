@@ -8,13 +8,14 @@
 
 using namespace std;
 
-class FileUtils 
+class FileUtils
 {
-	private:
-		string file_name;
-	public:
-		FileUtils();
-		const string getFileName();
+private:
+    string file_name;
+public:
+    FileUtils();
+
+    const string getFileName();
 };
 
 #endif //FILEUTILS_H

@@ -1,14 +1,13 @@
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 
 #include "FileUtils.h"
 
-FileUtils::FileUtils(){};
+FileUtils::FileUtils()
+{ };
+
 const string FileUtils::getFileName()
 {
-	return file_name;
+    return file_name;
 }

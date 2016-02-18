@@ -34,11 +34,9 @@ void Generator::generationRecursive(Piece piece_tab[], int position)
 {
     int type = pieceTypeByPosition((int *) coordonnees[position]);
     if (type == TYPE_COIN) {
-        for (int numero_piece = 0; numero_piece < 4; ++numero_piece)
-        {
+        for (int numero_piece = 0; numero_piece < 4; ++numero_piece) {
             if (disponibles[numero_piece]) {
-                for (int rotation = 0; rotation < 4; ++rotation)
-                {
+                for (int rotation = 0; rotation < 4; ++rotation) {
                     if (jeu.getTabC()[numero_piece].getColor(TOP) == 0 &&
                         jeu.getTabC()[numero_piece].getColor(LEFT) == 0) {
                         jeu.getTabC()[numero_piece].setRotation(rotation);

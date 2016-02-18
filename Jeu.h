@@ -6,10 +6,10 @@
 #define JEU_H
 
 
+#include "Piece.h"
 
-#include "Piece/Piece.h"
-
-class Jeu {
+class Jeu
+{
 private:
     Piece tabC[];
     Piece tabB[];
