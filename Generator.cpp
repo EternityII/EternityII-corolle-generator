@@ -9,6 +9,8 @@
 Generator::Generator(Jeu jeu)
 {
     this->jeu = jeu;
+    plateau = new Piece[jeu.getSize()][jeu.getSize()];
+    disponibles = new bool[jeu.getSize() * jeu.getSize()]{true};
 }
 
 /**
@@ -16,31 +18,68 @@ Generator::Generator(Jeu jeu)
  *
  * @param int type_corolle le type de la corolle.
  */
-void Generator::initGeneration(int type_corolle) const
+void Generator::initGeneration(int corolle_type)
 {
-    // TODO
-    int nb_pieces = jeu.getSize() * jeu.getSize();
-    int plateau[jeu.getSize()][jeu.getSize()];
+    // preparation de tous les elements utilises dans la recursivite
+    prerequisGeneration(corolle_type);
 
-    Piece *corolle_tab;
-    if (type_corolle == Corolle::C_1) {
-        corolle_tab = new Piece[Corolle::SIZE_C_1];
-    } else if (type_corolle == Corolle::BC_1) {
-        corolle_tab = new Piece[Corolle::SIZE_BC_1];
-    } else if (type_corolle == Corolle::B_1) {
-        corolle_tab = new Piece[Corolle::SIZE_B_1];
-    } else if (type_corolle == Corolle::IBB_1) {
-        corolle_tab = new Piece[Corolle::SIZE_IBB_1];
-    } else if (type_corolle == Corolle::IB_1) {
-        corolle_tab = new Piece[Corolle::SIZE_IB_1];
-    } else if (type_corolle == Corolle::I_1) {
-        corolle_tab = new Piece[Corolle::SIZE_I_1];
-    }
+    // nombre de piece de la corolle suivant le type de la corolle a générer
+    Piece piece_tab[corolle_size];
+
+    generationRecursive(piece_tab, 0);
 }
 
 
-const void Generator::generationRecursive(int *disponibles, int position, int size) const
+void Generator::generationRecursive(Piece piece_tab[], int position)
 {
-    // TODO
+    int type = pieceTypeByPosition((int *) coordonnees[position]);
+    if (type == TYPE_COIN) {
+        for (int numero_piece = 0; numero_piece < 4; ++numero_piece)
+        {
+            if (disponibles[numero_piece]) {
+                for (int rotation = 0; rotation < 4; ++rotation)
+                {
+                    if (jeu.getTabC()[numero_piece].getColor(TOP) == 0 &&
+                        jeu.getTabC()[numero_piece].getColor(LEFT) == 0) {
+                        jeu.getTabC()[numero_piece].setRotation(rotation);
+                        disponibles[numero_piece] = false;
+                        plateau[coordonnees[position][0]][coordonnees[position][1]];
+                    }
+                }
+            }
+        }
+    } else if (type == TYPE_BORD) {
 
+    } else if (type == TYPE_COIN) {
+
+    }
+}
+
+const bool Generator::compareColors(Piece a, Piece b, int orientation_a, int orientation_b) const
+{
+    return a.getColor(orientation_a) == b.getColor(orientation_b);
+}
+
+void Generator::prerequisGeneration(int corolle_type)
+{
+    if (corolle_type == Corolle::C_1) {
+        corolle_size = Corolle::SIZE_C_1;
+        coordonnees = new int[][2]{{0, 0},
+                                   {0, 1},
+                                   {1, 0},
+                                   {2, 0},
+                                   {1, 1},
+                                   {0, 2}};
+    }
+}
+
+const int Generator::pieceTypeByPosition(int position[2]) const
+{
+    if (position[0] == 0 && position[1] == 0) {
+        return TYPE_COIN;
+    } else if (position[0] == 0 || position[1] == 0) {
+        return TYPE_BORD;
+    } else {
+        return TYPE_INTERIEUR;
+    }
 }

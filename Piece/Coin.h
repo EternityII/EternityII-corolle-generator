@@ -7,7 +7,8 @@
 
 #include "Piece.h"
 
-class Coin : public Piece{
+class Coin : public Piece
+{
 
 };
 

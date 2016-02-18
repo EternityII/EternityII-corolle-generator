@@ -25,11 +25,10 @@ public:
     static const int I_1 = 5;
 
     static const int SIZE_C_1 = 3;
-    static const int SIZE_BC_1 = 4;
     static const int SIZE_B_1 = 4;
-    static const int SIZE_IBB_1 = 5;
-    static const int SIZE_IB_1 = 5;
     static const int SIZE_I_1 = 5;
+
+
 
     Corolle(const Piece pieces[], const int size, const int type, const int hamming);
 
