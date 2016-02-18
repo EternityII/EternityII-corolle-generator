@@ -5,6 +5,12 @@
 #ifndef COROLLE_H
 #define COROLLE_H
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
 #include "Piece/Piece.h"
 
 class Corolle
@@ -31,9 +37,11 @@ public:
     static const int SIZE_IB_1 = 5;
     static const int SIZE_I_1 = 5;
 
+	Corolle();
+
     Corolle(const Piece pieces[], const int size, const int type, const int hamming);
 
-    Corolle(const Corolle corolle);
+    Corolle(const Corolle& corolle);
 
     ~Corolle()
     { };
@@ -59,6 +67,8 @@ public:
     const int getType() const;
 
     const int getSize() const;
+
+	string toStringCorolle();
 };
 
 
