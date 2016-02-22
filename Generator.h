@@ -51,9 +51,9 @@ private:
 
     void putPiece(int numero_piece, int x, int y, Piece piece) const;
 
-    void pickOffPiece(int numero_piece, int x, int y, int &position) const;
+    void pickOffPiece(int numero_piece, int x, int y) const;
 
-    void generationRecursive(Piece piece_tab[], int &position) const;
+    void generationRecursive(Piece piece_tab[], int position) const;
 
 };
 
