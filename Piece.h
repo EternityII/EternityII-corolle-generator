@@ -9,11 +9,6 @@ using namespace std;
 class Piece
 {
 public:
-
-    static const int BORD = 0;
-    static const int COIN = 1;
-    static const int INTERIEUR = 2;
-
     static const int TOP = 0;
     static const int RIGHT = 1;
     static const int BOTTOM = 2;
