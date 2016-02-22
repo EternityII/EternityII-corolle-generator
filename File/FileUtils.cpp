@@ -8,6 +8,4 @@ FileUtils::FileUtils()
 { };
 
 const string FileUtils::getFileName()
-{
-    return file_name;
-}
+{ }

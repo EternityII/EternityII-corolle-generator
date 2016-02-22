@@ -31,7 +31,7 @@ public:
 
     void close();
 
-    const string getFileName();
+    const string getFileName() const;
 };
 
 #endif //FILEOUT_H

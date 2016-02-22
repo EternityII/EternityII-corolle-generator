@@ -16,7 +16,7 @@ void FileOut::open()
     fichier.open(getFileName().c_str(), fstream::out | fstream::trunc);
 }
 
-void FileOut::put(Corolle corolle) const
+void FileOut::put(const Corolle corolle) const
 {
     if (fichier) {
         fichier << corolle.toStringCorolle();
@@ -28,7 +28,7 @@ void FileOut::close()
     fichier.close();
 }
 
-const string FileOut::getFileName()
+const string FileOut::getFileName() const
 {
     ostringstream output;
     output << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<

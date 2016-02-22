@@ -22,6 +22,9 @@ public:
 
     int getColor(int position);
 
+    const int getId()const
+    { return id; };
+
 private:
 
     int id;

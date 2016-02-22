@@ -14,7 +14,7 @@ Corolle::Corolle()
     this->hamming = 1;
 }
 
-Corolle::Corolle(const Piece *pieces, const int size, const int type, const int hamming)
+Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) const
 {
     this->pieces = new Piece[size];
 
@@ -27,12 +27,12 @@ Corolle::Corolle(const Piece *pieces, const int size, const int type, const int 
     this->hamming = hamming;
 }
 
-Corolle::Corolle(const Corolle corolle)
+Corolle::Corolle(Corolle corolle) const
 {
     this->Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
 }
 
-string Corolle::toStringCorolle()
+const string Corolle::toStringCorolle() const
 {
     ostringstream output;
     for (int i = 0; i < size; ++i) {

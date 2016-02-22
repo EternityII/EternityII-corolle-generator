@@ -37,9 +37,9 @@ public:
 
     Corolle();
 
-    Corolle(const Piece pieces[], const int size, const int type, const int hamming);
+    Corolle(const Piece pieces[], int size, int type, int hamming) const;
 
-    Corolle(const Corolle corolle);
+    Corolle(const Corolle corolle) const;
 
     ~Corolle()
     { };
@@ -66,7 +66,7 @@ public:
 
     const int getSize() const;
 
-    string toStringCorolle();
+    const string toStringCorolle() const;
 };
 
 
