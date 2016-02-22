@@ -2,34 +2,37 @@ using namespace std;
 
 #include "FileOut.h"
 
-FileOut::FileOut(Corolle c, int s)
+FileOut::FileOut(int size, int corolle_hamming, int corolle_type, int piece_number, int rotation) const
 {
-    corolle = c;
-    size = s;
+    this->size = size;
+    this->corolle_hamming = corolle_hamming;
+    this->corolle_type = corolle_type;
+    this->piece_number = piece_number;
+    this->rotation = rotation;
 }
 
-void FileOut::open(fstream &fichier)
+void FileOut::open()
 {
-    fichier.open(getFileName(corolle, size).c_str(), fstream::out | fstream::trunc);
+    fichier.open(getFileName().c_str(), fstream::out | fstream::trunc);
 }
 
-void FileOut::put(fstream &fichier)
+void FileOut::put(Corolle corolle) const
 {
     if (fichier) {
         fichier << corolle.toStringCorolle();
     }
 }
 
-void FileOut::close(fstream &fichier)
+void FileOut::close()
 {
     fichier.close();
 }
 
-string FileOut::getFileName(Corolle corolle, int size)
+const string FileOut::getFileName()
 {
     ostringstream output;
-    output << "[" << size << "]/[" << corolle.getHamming() << "]_[" << corolle.getType() << "]_[" <<
-    "corolle.getPieces()[0]" << "]_[" << corolle.getRotation() << "].txt";
+    output << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<
+    piece_number << "_" << rotation << ".txt";
     return output.str();
 }
 

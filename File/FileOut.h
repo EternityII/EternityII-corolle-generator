@@ -14,19 +14,24 @@ using namespace std;
 class FileOut : public FileUtils
 {
 public:
-    Corolle corolle;
     int size;
+    int corolle_hamming;
+    int corolle_type;
+    int piece_number;
+    int rotation;
+
     fstream fichier;
 
-    FileOut(Corolle corolle, int size);
+    FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
+            int rotation) const;
 
-    void open(fstream &fichier);
+    void open();
 
-    void put(fstream &fichier);
+    void put(Corolle corolle) const;
 
-    void close(fstream &fichier);
+    void close();
 
-    string getFileName(Corolle corolle, int size);
+    const string getFileName();
 };
 
 #endif //FILEOUT_H
