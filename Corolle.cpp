@@ -1,42 +1,33 @@
-//
-// Created by stardisblue on 12/02/16.
-//
-
 #include "Corolle.h"
 
 using namespace std;
 
 Corolle::Corolle()
 {
-    this->pieces = NULL;
     this->size = 4;
     this->type = 1;
     this->hamming = 1;
 }
 
-Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) const
+Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) : size(size), type(type), hamming(hamming)
 {
     this->pieces = new Piece[size];
 
     for (int i = 0; i < size; ++i) {
         this->pieces[i] = pieces[i];
     }
-
-    this->size = size;
-    this->type = type;
-    this->hamming = hamming;
 }
 
-Corolle::Corolle(Corolle corolle) const
+Corolle::Corolle(const Corolle &corolle)
 {
-    this->Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
+    Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
 }
 
-const string Corolle::toStringCorolle() const
+const string Corolle::toString() const
 {
     ostringstream output;
     for (int i = 0; i < size; ++i) {
-        output << pieces[i] << " ";
+        output << pieces[i].toString();
     }
     return output.str();
 }

@@ -18,13 +18,18 @@ class FileIn
 public:
 
     //File *file;
-    string pathFile;
+    string path_file;
     ifstream in_file;
     int size;
 
     FileIn(int taille);
 
-    Jeu InitJeu();
+    FileIn(int taille, string path);
+
+    Jeu initJeu();
+
+private:
+    const string getFileName() const;
 
 
 };

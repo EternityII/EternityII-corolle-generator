@@ -7,8 +7,8 @@ using namespace std;
 
 int main()
 {
-    Jeu jeu; // incomplet
+   // Jeu jeu(); // incomplet
 
-    Generator generator(jeu);
-    generator.initGeneration(Corolle::C_1); // Triangle en hamming de 1
+    //Generator generator(jeu);
+    //generator.initGeneration(Corolle::C_1); // Triangle en hamming de 1
 }

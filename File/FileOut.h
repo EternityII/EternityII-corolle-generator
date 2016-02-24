@@ -20,14 +20,20 @@ public:
     int piece_number;
     int rotation;
 
-    fstream fichier;
+    ofstream fichier;
+
+    FileOut()
+    { };
 
     FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
-            int rotation) const;
+            int rotation);
 
     void open();
 
-    void put(Corolle corolle) const;
+    bool isOpen()
+    { return fichier.is_open(); };
+
+    void put(Corolle corolle);
 
     void close();
 

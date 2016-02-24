@@ -2,64 +2,49 @@
 
 Piece::Piece()
 {
+    id = -1;
     rotation = 0;
 }
 
-Piece::Piece(int idPiece, int *couleur)
+Piece::Piece(int idPiece, int *couleur) : id(idPiece), rotation(0)
 {
-
-    this->id = idPiece;
     this->couleur = couleur;
-    this->rotation = 0;
     //Compte le nombre de Zero afin de definir le type
-    int nbZero = 0;
+    int nb_zero = 0;
 
     for (int i = 0; i < 4; i++) {
         if (couleur[i] == 0) {
-            nbZero++;
+            nb_zero++;
         }
     }
 
-    if (nbZero == 0) {
+    if (nb_zero == 0) {
         this->type = INTERIEUR;
-    }
-    else {
-        if (nbZero == 1) {
-            this->type = BORD;
-        }
-        else {
-            if (nbZero == 2) {
-                this->type = COIN;
-
-            }
-        }
+    } else if (nb_zero == 1) {
+        this->type = BORD;
+    } else if (nb_zero == 2) {
+        this->type = COIN;
     }
 }
 
-string Piece::toString()
+const string Piece::toString()
 {
-
     ostringstream s;
-    s << "La Piece : ";
     s << this->id;
-    s << " a été ajouté";
-    s << "avec la couleur";
-    for(int i=0;i<4;i++){
-        s << couleur[i];
-    }
 
     return s.str();
 }
 
-int Piece::getColor(int position)
+const int Piece::getColor(int position) const
 {
     if (position > 4) {
         return -1;
     }
+
     return couleur[(position + rotation) % 4];
 }
 
-//Getters 
+//Getters
 int Piece::getRotation()
 {
 return this->rotation;

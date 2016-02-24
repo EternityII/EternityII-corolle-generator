@@ -15,9 +15,9 @@ class Generator
 public:
     Generator(Jeu jeu);
 
-    void initGeneration(int corolle_type);
+    void initGeneration(int corolle_type, int hamming);
 
-    static const int pieceTypeByPosition(int x, int y) const;
+    static const int pieceTypeByPosition(int x, int y);
 
 private:
 
@@ -37,29 +37,28 @@ private:
     static const int POS_TYPE_BORD_BOTTOM = 13;
     static const int POS_TYPE_BORD_RIGHT = 14;
     static const int POS_TYPE_INTERIEUR = 6;
-    static const int HAMMING_1 = 1;
 
-    static const int HAMMING_2 = 2;
-    static const int HAMMING_3 = 3;
     Jeu jeu;
 
     Piece **plateau;
     bool *disponibles;
-    FileOut file_out = NULL;
-    int coordonnees[][3];
+    FileOut *file_out;
+    int **coordonnees;
 
     int corolle_type;
     int corolle_size;
     int corolle_hamming;
 
 
-    void prerequisGeneration(int corolle_type);
+    void coordonneesCreator();
 
-    static const bool compareColors(Piece a, Piece b, int side_a, int side_b) const;
+    void prerequisGeneration(int corolle_type, int hamming);
 
-    const bool compareSides(Piece piece, int x, int y, int side_to_compare) const;
+   // static const bool compareColors(Piece a, Piece b, int side_a, int side_b);
 
-    const bool canPutPiece(Piece piece, int x, int y, int position_type) const;
+    const bool compareSides(Piece piece, int x, int y, int side_to_compare);
+
+    const bool canPutPiece(Piece piece, int x, int y, int position_type);
 
     void putPiece(int x, int y, Piece piece) const;
 

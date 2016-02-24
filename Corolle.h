@@ -17,19 +17,23 @@ using namespace std;
 class Corolle
 {
 private:
-    Piece pieces[];
+    Piece *pieces;
     int rotation = 0;
     int size;
     int type;
     int hamming;
 
 public:
-    static const int C_1 = 0;
-    static const int BC_1 = 1;
-    static const int B_1 = 2;
-    static const int IBB_1 = 3;
-    static const int IB_1 = 4;
-    static const int I_1 = 5;
+    static const int C = 0;
+    static const int BC = 1;
+    static const int B = 2;
+    static const int IBB = 3;
+    static const int IB = 4;
+    static const int I = 5;
+
+    static const int HAMMING_1 = 1;
+    static const int HAMMING_2 = 2;
+    static const int HAMMING_3 = 3;
 
     static const int SIZE_C_1 = 3;
     static const int SIZE_B_1 = 4;
@@ -37,9 +41,9 @@ public:
 
     Corolle();
 
-    Corolle(const Piece pieces[], int size, int type, int hamming) const;
+    Corolle(const Piece pieces[], int size, int type, int hamming);
 
-    Corolle(const Corolle corolle) const;
+    Corolle(const Corolle &corolle);
 
     ~Corolle()
     { };
@@ -66,7 +70,7 @@ public:
 
     const int getSize() const;
 
-    const string toStringCorolle() const;
+    const string toString() const;
 };
 
 

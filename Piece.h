@@ -14,7 +14,7 @@ public:
     static const int INTERIEUR = 0;
     static const int BORD = 1;
     static const int COIN = 2;
-    
+
     //Rotation
     static const int TOP = 0;
     static const int RIGHT = 1;
@@ -25,11 +25,11 @@ public:
 
     Piece(int i, int *couleur);
 
-    string toString();
+    const string toString();
 
-    int getColor(int position);
+    const int getColor(int position) const;
 
-    const int getId()const
+    const int getId() const
     { return id; };
 
     int getRotation();
