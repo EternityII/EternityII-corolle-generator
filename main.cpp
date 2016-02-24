@@ -4,11 +4,14 @@ using namespace std;
 
 #include "Corolle.h"
 #include "Generator.h"
+#include "File/FileIn.h"
 
 int main()
 {
-   // Jeu jeu(); // incomplet
 
-    //Generator generator(jeu);
-    //generator.initGeneration(Corolle::C_1); // Triangle en hamming de 1
+    FileIn file_in(4);
+    Jeu jeu = file_in.initJeu();
+
+    Generator generator(jeu);
+    generator.initGeneration(Corolle::C, Corolle::HAMMING_1); // Triangle en hamming de 1
 }

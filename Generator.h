@@ -17,7 +17,7 @@ public:
 
     void initGeneration(int corolle_type, int hamming);
 
-    static const int pieceTypeByPosition(int x, int y);
+    const int pieceTypeByPosition(int x, int y);
 
 private:
 
@@ -38,12 +38,17 @@ private:
     static const int POS_TYPE_BORD_RIGHT = 14;
     static const int POS_TYPE_INTERIEUR = 6;
 
-    Jeu jeu;
+    static const int JEU_SIZE_MAX = 16;
+    static const int JEU_PIECES_MAX = 256;
 
-    Piece **plateau;
-    bool *disponibles;
+
+    Jeu jeu;
+    int jeu_size;
+
+    Piece plateau[JEU_SIZE_MAX][JEU_SIZE_MAX];
+    bool disponibles[JEU_PIECES_MAX];
     FileOut *file_out;
-    int **coordonnees;
+    int coordonnees[10][3];
 
     int corolle_type;
     int corolle_size;
@@ -60,14 +65,13 @@ private:
 
     const bool canPutPiece(Piece piece, int x, int y, int position_type);
 
-    void putPiece(int x, int y, Piece piece) const;
+    void putPiece(int x, int y, Piece piece);
 
-    void pickOffPiece(int numero_piece, int x, int y) const;
+    void pickOffPiece(int numero_piece, int x, int y);
 
     void writeInFile(const Corolle corolle);
 
     void generationRecursive(int &position);
-
 };
 
 

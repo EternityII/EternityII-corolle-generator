@@ -33,9 +33,21 @@ const string Piece::toString()
 {
     ostringstream s;
     s << this->id;
-
     return s.str();
 }
+
+const string Piece::toStringDetail()
+{
+    ostringstream stream;
+    stream << "Pièce n " << this->id << endl;
+
+    for (int i = 0; i < 4; ++i) {
+        stream << couleur[i] << " ";
+    }
+
+    return stream.str();
+}
+
 
 const int Piece::getColor(int position)
 {

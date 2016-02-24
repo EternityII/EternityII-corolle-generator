@@ -27,7 +27,7 @@ void FileOut::close()
 const string FileOut::getFileName() const
 {
     ostringstream output;
-    output << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<
+    output << "/home/stardisblue/Documents/Cours/Eternity/cEternithug/output/" << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<
     piece_number << "_" << rotation << ".txt";
     return output.str();
 }

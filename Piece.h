@@ -27,21 +27,27 @@ public:
 
     const string toString();
 
+    const string toStringDetail();
+
     const int getColor(int position);
 
     const int getId() const
     { return id; };
 
     int getRotation();
-    int* getTabCouleur();
-    int  getType();
+
+    int *getTabCouleur();
+
+    int getType();
+
     void setRotation(int new_rotation);
-    void setTabCouleur(int * new_tab_couleur);
+
+    void setTabCouleur(int *new_tab_couleur);
 
 private:
 
     int id;
-    int couleur[4];
+    int couleur[4] = {0, 0, 0, 0};
     int rotation;
     int type;
 

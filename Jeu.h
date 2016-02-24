@@ -12,7 +12,7 @@ class Jeu
 
 public:
 
-    Jeu(int size); //constructeur
+    Jeu(const int size); //constructeur
     int addPiece(Piece p); //Ajout d'une piece dans le jeu
 
     //Getters
