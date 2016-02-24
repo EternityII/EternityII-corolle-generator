@@ -22,6 +22,7 @@ class Jeu {
 	Piece* getTabI();
 
 
+
 	private:
 
 	int size;
@@ -31,6 +32,9 @@ class Jeu {
 	Piece* TabI;
 
 	int nb_pieces_presentes;
+	int nb_pieces_tabC;
+	int nb_pieces_tabB;
+	int nb_pieces_tabI;
 
 };
 

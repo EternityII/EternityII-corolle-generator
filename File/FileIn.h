@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "../Jeu.h"
+
 
 using namespace std;
 
@@ -22,7 +24,7 @@ public:
 
     FileIn(int taille);
 
-    void InitJeu();
+    Jeu InitJeu();
 
 
 };

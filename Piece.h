@@ -11,9 +11,10 @@ class Piece
 
 public:
     //Type de Piece
-    static const int BORD = 0;
-    static const int COIN = 1;
-    static const int INTERIEUR = 2;
+    static const int INTERIEUR = 0;
+    static const int BORD = 1;
+    static const int COIN = 2;
+    
     //Rotation
     static const int TOP = 0;
     static const int RIGHT = 1;
@@ -30,6 +31,12 @@ public:
 
     const int getId()const
     { return id; };
+
+    int getRotation();
+    int* getTabCouleur();
+    int  getType();
+    void setRotation(int new_rotation);
+    void setTabCouleur(int * new_tab_couleur);
 
 private:
 

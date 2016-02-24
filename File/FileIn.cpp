@@ -1,6 +1,6 @@
 #include <sstream>
 #include "FileIn.h"
-#include "../Jeu.h"
+
 
 FileIn::FileIn(int taille)
 {
@@ -10,13 +10,16 @@ FileIn::FileIn(int taille)
     string extension = ".txt";
 
     ostringstream s;
-    s << "Pieces_" << taille << "x" << taille << extension;
+    s << "../assets/";
+    s << "pieces_" << taille << "x" << taille << extension;
 
     this->pathFile = s.str();
 
+    cout << s.str() << endl;
+
 }
 
-void FileIn::InitJeu()
+Jeu FileIn::InitJeu()
 {
     Jeu jeu(this->size);
 
@@ -28,26 +31,33 @@ void FileIn::InitJeu()
     int startPiece = 4;
 
     //Ouverture du fichier
-    in_file.open(this->pathFile.c_str(), ifstream::in);
+    in_file.open(this->pathFile.c_str(), ios::in);
 
+    if(!in_file.eof()){
+        cout <<"Fichier ouvert" << endl;
+    }
 
     int *couleur = new int[4];
-    int color;
+    int color = 0;
 
-    string str; // 4 premieres lignes
-    for (int i = 0; i < 4; ++i) {
+    string str = ""; // 4 premieres lignes
+    
+    for (int i = 0; i < 4; i++) {
         in_file >> str;
+        cout << str << endl;
     }
+    cout << "string" << endl;
 
     for (int i = 0; i < (size * size); i++) {
         for (int j = 0; j < 4; j++) {
             in_file >> color;
-            couleur[i] = color;
+            couleur[j] = color;
         }
 
         Piece p(id, couleur);
+	    jeu.addPiece(p);
         cout << p.toString() << endl;
         id++;
     }
+return jeu;
 }
-

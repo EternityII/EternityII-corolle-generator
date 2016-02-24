@@ -14,7 +14,7 @@ Piece::Piece(int idPiece, int *couleur)
     //Compte le nombre de Zero afin de definir le type
     int nbZero = 0;
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
         if (couleur[i] == 0) {
             nbZero++;
         }
@@ -43,6 +43,10 @@ string Piece::toString()
     s << "La Piece : ";
     s << this->id;
     s << " a été ajouté";
+    s << "avec la couleur";
+    for(int i=0;i<4;i++){
+        s << couleur[i];
+    }
 
     return s.str();
 }
@@ -54,3 +58,30 @@ int Piece::getColor(int position)
     }
     return couleur[(position + rotation) % 4];
 }
+
+//Getters 
+int Piece::getRotation()
+{
+return this->rotation;
+}
+
+int* Piece::getTabCouleur(){
+return this->couleur;
+}
+
+int Piece::getType(){
+return this->type;
+}
+
+//Setters
+void Piece::setRotation(int new_rotation)
+{
+this->rotation = new_rotation;
+}
+
+void Piece::setTabCouleur(int * new_tab_couleur)
+{
+this->couleur = new_tab_couleur;
+}
+
+
