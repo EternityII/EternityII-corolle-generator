@@ -10,8 +10,8 @@ Jeu::Jeu(int sizeJeu){
 
 	int size_of_tab_I = pow(this->size-2,2);
 
-	this->TabI = new Piece[sizeOfTabI];
-	this->NbPiecesPresentes = 0;
+	this->TabI = new Piece[size_of_tab_I];
+	this->nb_pieces_presentes = 0;
 
 }
 

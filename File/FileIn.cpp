@@ -50,3 +50,4 @@ void FileIn::InitJeu()
         id++;
     }
 }
+

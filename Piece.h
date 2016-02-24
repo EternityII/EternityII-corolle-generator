@@ -8,7 +8,13 @@ using namespace std;
 
 class Piece
 {
+
 public:
+    //Type de Piece
+    static const int BORD = 0;
+    static const int COIN = 1;
+    static const int INTERIEUR = 2;
+    //Rotation
     static const int TOP = 0;
     static const int RIGHT = 1;
     static const int BOTTOM = 2;
