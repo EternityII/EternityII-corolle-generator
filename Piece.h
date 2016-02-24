@@ -23,11 +23,11 @@ public:
 
     Piece();
 
-    Piece(int i, int *couleur);
+    Piece(int i, int couleur[4]);
 
     const string toString();
 
-    const int getColor(int position) const;
+    const int getColor(int position);
 
     const int getId() const
     { return id; };
@@ -41,7 +41,7 @@ public:
 private:
 
     int id;
-    int *couleur;
+    int couleur[4];
     int rotation;
     int type;
 

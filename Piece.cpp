@@ -6,9 +6,11 @@ Piece::Piece()
     rotation = 0;
 }
 
-Piece::Piece(int idPiece, int *couleur) : id(idPiece), rotation(0)
+Piece::Piece(int idPiece, int couleur[4]) : id(idPiece), rotation(0)
 {
-    this->couleur = couleur;
+    for (int i = 0; i < 4; ++i) {
+        this->couleur[i] = couleur[i];
+    }
     //Compte le nombre de Zero afin de definir le type
     int nb_zero = 0;
 
@@ -35,7 +37,7 @@ const string Piece::toString()
     return s.str();
 }
 
-const int Piece::getColor(int position) const
+const int Piece::getColor(int position)
 {
     if (position > 4) {
         return -1;
@@ -64,9 +66,11 @@ void Piece::setRotation(int new_rotation)
 this->rotation = new_rotation;
 }
 
-void Piece::setTabCouleur(int * new_tab_couleur)
+void Piece::setTabCouleur(int new_tab_couleur[4])
 {
-this->couleur = new_tab_couleur;
+    for (int i = 0; i < 5; ++i) {
+        couleur[i] = new_tab_couleur[i];
+    }
 }
 
 
