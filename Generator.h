@@ -4,7 +4,8 @@
 
 #ifndef GENERATOR_H
 #define GENERATOR_H
-#include <stdlib.h> 
+
+#include <stdlib.h>
 
 #include "Jeu.h"
 #include "Corolle.h"
@@ -58,7 +59,7 @@ private:
     int corolle_size;
     int corolle_hamming;
 
-    void parcoursDiagonal(int origin, int orientation, int size, int x, int y);
+    void parcoursDiagonal(int &position_nb, int orientation, int size, int ori_x, int ori_y);
 
     const int pieceTypeByPosition(int x, int y);
 
