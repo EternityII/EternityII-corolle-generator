@@ -69,7 +69,7 @@ private:
 
     void pickOffPiece(int numero_piece, int x, int y);
 
-    void writeInFile(const Corolle corolle);
+    void writeInFile(Corolle &corolle);
 
     void generationRecursive(int &position);
 };

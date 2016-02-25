@@ -1,6 +1,6 @@
 #include "Piece.h"
 
-Piece::Piece()
+Piece::Piece() : couleur{0, 0, 0, 0}
 {
     id = -1;
     rotation = 0;
@@ -21,29 +21,29 @@ Piece::Piece(int idPiece, int couleur[4]) : id(idPiece), rotation(0)
     }
 
     if (nb_zero == 0) {
-        this->type = INTERIEUR;
+        type = INTERIEUR;
     } else if (nb_zero == 1) {
-        this->type = BORD;
+        type = BORD;
     } else if (nb_zero == 2) {
-        this->type = COIN;
+        type = COIN;
     }
 }
 
 const string Piece::toString()
 {
     ostringstream s;
-    s << this->id;
+    s << id;
     return s.str();
 }
 
 const string Piece::toStringDetail()
 {
     ostringstream stream;
-    stream << "Pièce n " << this->id << endl;
+    stream << "Pièce n " << id << endl;
 
-    for (int i = 0; i < 4; ++i) {
+/*    for (int i = 0; i < 4; ++i) {
         stream << couleur[i] << " ";
-    }
+    }*/
 
     return stream.str();
 }
@@ -61,21 +61,23 @@ const int Piece::getColor(int position)
 //Getters
 int Piece::getRotation()
 {
-return this->rotation;
+    return rotation;
 }
 
-int* Piece::getTabCouleur(){
-return this->couleur;
+int *Piece::getTabCouleur()
+{
+    return couleur;
 }
 
-int Piece::getType(){
-return this->type;
+int Piece::getType()
+{
+    return type;
 }
 
 //Setters
 void Piece::setRotation(int new_rotation)
 {
-this->rotation = new_rotation;
+    rotation = new_rotation;
 }
 
 void Piece::setTabCouleur(int new_tab_couleur[4])

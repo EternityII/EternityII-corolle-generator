@@ -172,20 +172,20 @@ void Generator::pickOffPiece(int numero_piece, int x, int y)
     disponibles[numero_piece] = true;
 }
 
-void Generator::writeInFile(const Corolle corolle)
+void Generator::writeInFile(Corolle &corolle)
 {
-    cout << "writeInFile" << endl;
-    if (file_out->isOpen()) { // si un fichier est ouvert
+    if (file_out != NULL) { // si un fichier est ouvert
         if (file_out->piece_number == corolle.getPieces()[0].getId()
             && file_out->rotation == corolle.getRotation()) { // si c'est le bon fichier
             file_out->put(corolle);
         } else {// si c'est pas le bon on le ferme et on ouvre le bon
             file_out->close();
 
-            FileOut *new_file = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(),
-                                            corolle.getPieces()[0].getId(),
-                                            corolle.getRotation());
-            file_out = new_file;
+            delete file_out;
+
+            file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
+                                   corolle.getRotation());
+            file_out->open();
             file_out->put(corolle);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
@@ -289,7 +289,7 @@ void Generator::generationRecursive(int &position)
             piece_tab[i] = plateau[coord_x][coord_y];
         }
         Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
-        cout << corolle.toString() << endl;
+        cerr << corolle.toString() << endl;
 
         writeInFile(corolle);
     }

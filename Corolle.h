@@ -13,12 +13,13 @@
 using namespace std;
 
 #include "Piece.h"
+#include "Jeu.h"
 
 class Corolle
 {
 private:
-    Piece *pieces;
-    int rotation = 0;
+    Piece pieces[Jeu::JEU_PIECES_MAX];
+    int rotation;
     int size;
     int type;
     int hamming;
@@ -70,7 +71,7 @@ public:
 
     const int getSize() const;
 
-    const string toString() const;
+    const string toString();
 };
 
 

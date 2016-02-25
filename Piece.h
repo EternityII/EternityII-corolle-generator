@@ -23,6 +23,9 @@ public:
 
     Piece();
 
+    ~Piece()
+    { };
+
     Piece(int i, int couleur[4]);
 
     const string toString();
@@ -44,11 +47,11 @@ public:
 
     void setTabCouleur(int *new_tab_couleur);
 
-private:
-
-    int id;
-    int couleur[4] = {0, 0, 0, 0};
     int rotation;
+
+private:
+    int id;
+    int couleur[4];
     int type;
 
 };

@@ -4,18 +4,19 @@ using namespace std;
 
 Corolle::Corolle()
 {
-    this->size = 4;
-    this->type = 1;
-    this->hamming = 1;
+    size = 4;
+    type = 1;
+    hamming = 1;
+    rotation = 0;
 }
 
 Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) : size(size), type(type), hamming(hamming)
 {
-    this->pieces = new Piece[size];
-
     for (int i = 0; i < size; ++i) {
         this->pieces[i] = pieces[i];
     }
+
+    rotation = pieces[0].rotation;
 }
 
 Corolle::Corolle(const Corolle &corolle)
@@ -23,11 +24,11 @@ Corolle::Corolle(const Corolle &corolle)
     Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
 }
 
-const string Corolle::toString() const
+const string Corolle::toString()
 {
     ostringstream output;
     for (int i = 0; i < size; ++i) {
-        output << pieces[i].toString();
+        output << pieces[i].toString() << " ";
     }
     return output.str();
 }
@@ -50,8 +51,12 @@ const int Corolle::getType() const
 const int Corolle::getSize() const
 { return size; }
 
-void Corolle::setPieces(Piece *pieces)
-{ this->pieces = pieces; }
+void Corolle::setPieces(Piece pieces[Jeu::JEU_PIECES_MAX])
+{
+    for (int i = 0; i < size; ++i) {
+        this->pieces[i] = pieces[i];
+    }
+}
 
 void Corolle::setRotation(int rotation)
 { this->rotation = rotation; }
