@@ -25,6 +25,9 @@ public:
     FileOut()
     { };
 
+    ~FileOut()
+    { };
+
     FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
             int rotation);
 
@@ -33,7 +36,7 @@ public:
     bool isOpen()
     { return fichier.is_open(); };
 
-    void put(Corolle corolle);
+    void put(Corolle &corolle);
 
     void close();
 

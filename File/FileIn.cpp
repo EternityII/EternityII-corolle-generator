@@ -53,7 +53,6 @@ Jeu FileIn::initJeu()
 const string FileIn::getFileName() const
 {
     ostringstream s;// Barbarisme a l'état pur
-    s << "/home/stardisblue/Documents/Cours/Eternity/cEternithug/assets/pieces_4x4 bis.txt";
-    //s << "./assets/pieces_" << size << "x" << size << ".txt";
+    s << "./assets/pieces_" << size << "x" << size << ".txt";
     return s.str();
 }

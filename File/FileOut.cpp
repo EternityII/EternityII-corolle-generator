@@ -12,10 +12,10 @@ void FileOut::open()
     fichier.open(getFileName().c_str(), ofstream::out | ofstream::trunc);
 }
 
-void FileOut::put(Corolle corolle)
+void FileOut::put(Corolle &corolle)
 {
     if (fichier) {
-        fichier << corolle.toString();
+        fichier << corolle.toString() << endl;
     }
 }
 
@@ -27,7 +27,7 @@ void FileOut::close()
 const string FileOut::getFileName() const
 {
     ostringstream output;
-    output << "/home/stardisblue/Documents/Cours/Eternity/cEternithug/output/" << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<
+    output << "./output/" << size << "/" << corolle_hamming << "_" << corolle_type << "_" <<
     piece_number << "_" << rotation << ".txt";
     return output.str();
 }
