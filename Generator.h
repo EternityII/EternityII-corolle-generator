@@ -4,7 +4,7 @@
 
 #ifndef GENERATOR_H
 #define GENERATOR_H
-
+#include <stdlib.h> 
 
 #include "Jeu.h"
 #include "Corolle.h"

@@ -45,7 +45,7 @@ void Generator::parcoursDiagonal(int origin, int orientation, int size, int x, i
 
     if (pos_x < 0 || pos_y < 0 || cpt < 0 || orientation < 0) {
         perror("Bad coordinates");
-        exit;
+        exit(EXIT_FAILURE);
     }
 
     if (orientation == SW) {
