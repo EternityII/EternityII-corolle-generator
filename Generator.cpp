@@ -1,7 +1,3 @@
-//
-// Created by stardisblue on 12/02/16.
-//
-
 #include "Generator.h"
 
 
@@ -16,25 +12,123 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
     cout << "End Generator " << endl;
 }
 
+const int Generator::pieceTypeByPosition(int x, int y)
+{
+    cout << "PieceTypeByPosition" << endl;
+    if (x == 0 && y == 0) {
+        return POS_TYPE_COIN_NW;
+    } /*else if (x == jeu_size - 1 && y == 0) {
+        return POS_TYPE_COIN_NE;
+    } else if (x == jeu_size - 1 && y == jeu_size - 1) {
+        return POS_TYPE_COIN_SE;
+    } else if (x == 0 && y == jeu_size - 1) {
+        return POS_TYPE_COIN_SW;
+    }*/ else if (x == 0) {
+        return POS_TYPE_BORD_LEFT;
+    } else if (y == 0) {
+        return POS_TYPE_BORD_TOP;
+    } else {
+        return POS_TYPE_INTERIEUR;
+    }
+
+}
+
+/**
+ * TODO : finir la fonction recursive
+ *
+ */
+void Generator::parcoursDiagonal(int origin, int orientation, int size, int x, int y)
+{
+    int cpt = origin;
+    int pos_x = x;
+    int pos_y = y;
+
+    if (pos_x < 0 || pos_y < 0 || cpt < 0 || orientation < 0) {
+        perror("Bad coordinates");
+        exit;
+    }
+
+    if (orientation == SW) {
+        while (pos_x >= 0) {
+            coordonnees[cpt][POS_X] = pos_x;
+            coordonnees[cpt][POS_Y] = pos_y;
+            coordonnees[cpt][POS_TYPE] = pieceTypeByPosition(pos_x, pos_y);
+            pos_x--;
+            pos_y++;
+            cpt++;
+
+        }
+    }
+}
+
+void Generator::coordonneesCreator()
+{
+    cout << "coordonnesCreator" << endl;
+    if (corolle_type == Corolle::C) {
+        int cpt = 0,
+                x = 0,
+                y = 0;
+        coordonnees[cpt][POS_X] = x;
+        coordonnees[cpt][POS_Y] = y;
+        coordonnees[cpt][POS_TYPE] = pieceTypeByPosition(x, y);
+        x++;
+        cpt++;
+
+        while (x < corolle_hamming + 1) {
+            if (x >= 0) {
+
+                coordonnees[cpt][POS_X] = x;
+                coordonnees[cpt][POS_Y] = y;
+                coordonnees[cpt][POS_TYPE] = pieceTypeByPosition(x, y);
+                y++;
+                x--;
+                cpt++;
+
+            } else {
+                x = y;
+                y = 0;
+            }
+        }
+    }
+}
+
 /**
  * Initialise l'ordre de parcours
- *
- * TODO : automatiser la création de la table
  */
 void Generator::prerequisGeneration(int corolle_type, int hamming)
 {
     cout << "prerequisGeneration" << endl;
+
+    corolle_hamming = hamming; // hamming de la corolle
     this->corolle_type = corolle_type;
 
     if (corolle_type == Corolle::C) {
-        corolle_size = Corolle::SIZE_C_1;// nombre de piece de la corolle suivant le type de la corolle a générer
-        corolle_hamming = hamming; // hamming de la corolle
+        // nombre de piece de la corolle suivant le type de la corolle a générer
 
-        coordonneesCreator();
+        if (corolle_hamming == Corolle::HAMMING_1) {
+            corolle_size = Corolle::SIZE_C_1;
+        } else if (corolle_hamming == Corolle::HAMMING_2) {
+            corolle_size = Corolle::SIZE_C_2;
+        } else if (corolle_hamming == Corolle::HAMMING_3) {
+            corolle_size = Corolle::SIZE_C_3;
+        }
+
+    } else if (corolle_type == Corolle::BC || corolle_type == Corolle::B) {
+        // nombre de piece de la corolle suivant le type de la corolle a générer
+
+        if (corolle_hamming == Corolle::HAMMING_1) {
+            corolle_size = Corolle::SIZE_B_1;
+        } else if (corolle_hamming == Corolle::HAMMING_2) {
+            corolle_size = Corolle::SIZE_B_2;
+        } else if (corolle_hamming == Corolle::HAMMING_3) {
+            corolle_size = Corolle::SIZE_B_3;
+        }
 
     } else {
         perror("Valeur de int corolle_type invalide");
     }
+
+    coordonneesCreator();
 }
 
 /**
@@ -69,7 +163,7 @@ void Generator::initGeneration(int corolle_type, int hamming)
  * @param int side_a le bord a comparer de la pièce a
  * @param int side_b le bord a comparer de la pièce b
  */
-static const bool compareColors(Piece a, Piece b, int side_a, int side_b)
+const bool Generator::compareColors(Piece a, Piece b, int side_a, int side_b)
 {
     return a.getColor(side_a) == b.getColor(side_b);
 }
@@ -243,7 +337,7 @@ void Generator::generationRecursive(int &position)
 
                     if (position_type == POS_TYPE_BORD_TOP) { // bonne orientation de la piece de bord
                         piece_bord.setRotation(Piece::TOP);
-                    }else if (position_type == POS_TYPE_BORD_RIGHT) { // bonne orientation de la piece de bord
+                    } else if (position_type == POS_TYPE_BORD_RIGHT) { // bonne orientation de la piece de bord
                         piece_bord.setRotation(Piece::LEFT);
                     } else if (position_type == POS_TYPE_BORD_BOTTOM) {
                         piece_bord.setRotation(Piece::BOTTOM);
@@ -296,55 +390,3 @@ void Generator::generationRecursive(int &position)
 }
 
 // Inutile pour l'instant
-
-void Generator::coordonneesCreator()
-{
-    cout << "coordonnesCreator" << endl;
-    if (corolle_type == Corolle::C) {
-        int cpt = 0,
-                x = 0,
-                y = 0;
-        coordonnees[cpt][POS_X] = x;
-        coordonnees[cpt][POS_Y] = y;
-        coordonnees[cpt][POS_TYPE] = pieceTypeByPosition(x, y);
-        x++;
-        cpt++;
-
-        while (x < corolle_hamming + 1) {
-            if (x >= 0) {
-
-                coordonnees[cpt][POS_X] = x;
-                coordonnees[cpt][POS_Y] = y;
-                coordonnees[cpt][POS_TYPE] = pieceTypeByPosition(x, y);
-                y++;
-                x--;
-                cpt++;
-
-            } else {
-                x = y + 1;
-                y = 0;
-            }
-        }
-    }
-}
-
-const int Generator::pieceTypeByPosition(int x, int y)
-{
-    cout << "PieceTypeByPosition" << endl;
-    if (x == 0 && y == 0) {
-        return POS_TYPE_COIN_NW;
-    } /*else if (x == jeu_size - 1 && y == 0) {
-        return POS_TYPE_COIN_NE;
-    } else if (x == jeu_size - 1 && y == jeu_size - 1) {
-        return POS_TYPE_COIN_SE;
-    } else if (x == 0 && y == jeu_size - 1) {
-        return POS_TYPE_COIN_SW;
-    }*/ else if (x == 0) {
-        return POS_TYPE_BORD_LEFT;
-    } else if (y == 0) {
-        return POS_TYPE_BORD_TOP;
-    } else {
-        return POS_TYPE_INTERIEUR;
-    }
-
-}

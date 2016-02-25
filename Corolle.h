@@ -37,8 +37,16 @@ public:
     static const int HAMMING_3 = 3;
 
     static const int SIZE_C_1 = 3;
+    static const int SIZE_C_2 = 6;
+    static const int SIZE_C_3 = 10;
+
     static const int SIZE_B_1 = 4;
+    static const int SIZE_B_2 = 9;
+    static const int SIZE_B_3 = 16;
+
     static const int SIZE_I_1 = 5;
+    static const int SIZE_I_2 = 13;
+    static const int SIZE_I_3 = 25;
 
     Corolle();
 
