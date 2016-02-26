@@ -21,7 +21,7 @@ Jeu FileIn::initJeu()
         cout << "Fichier " << path_file << " ouvert" << endl;
     }
 
-    int *couleur = new int[4];
+    int couleur[4];
     int color = 0;
 
     string str = " "; // 4 premieres lignes
