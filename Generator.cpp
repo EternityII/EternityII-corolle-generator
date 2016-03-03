@@ -4,6 +4,8 @@
 Generator::Generator(Jeu jeu) : jeu(jeu)
 {
     cout << "Generator " << jeu.getSize() << endl;
+    file_out = NULL;
+    
     jeu_size = jeu.getSize();
     for (int i = 0; i < JEU_PIECES_MAX; ++i) {
         disponibles[i] = true;
