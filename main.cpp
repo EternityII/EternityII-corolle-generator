@@ -9,8 +9,9 @@ using namespace std;
 int main()
 {
 
-    FileIn file_in(4);
+    FileIn file_in("./assets/pieces_7x7.txt");
     Jeu jeu = file_in.initJeu();
+   	cout << "Color"  << jeu.getJeu()[3][3] << endl;
 
     Generator generator(jeu);
     generator.initGeneration(Corolle::C, Corolle::HAMMING_2); // Triangle en hamming de 1

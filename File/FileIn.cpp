@@ -9,6 +9,26 @@ FileIn::FileIn(int taille) : size(taille)
 {
     path_file = getFileName();
 }
+FileIn::FileIn(string path) : path_file(path)
+{
+    in_file.open(this->path_file.c_str(),ios::out);
+
+    if(in_file.is_open()){  
+
+        int size_in_file;
+        in_file >> size_in_file;
+        cout << "Taille dans le fichier : " << size_in_file << endl;
+        if (size_in_file <= 0 || size_in_file > 16) return;
+        else {
+            size = size_in_file;
+            in_file.close();
+        }
+    }
+    else {
+        cout << "Erreur lors de l'ouverture du fichier" << endl; 
+    }
+
+}
 
 Jeu FileIn::initJeu()
 {

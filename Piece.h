@@ -47,6 +47,8 @@ public:
 
     void setTabCouleur(int *new_tab_couleur);
 
+    int operator[](int position);
+
     int rotation;
 
 private:

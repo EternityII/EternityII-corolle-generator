@@ -87,4 +87,8 @@ void Piece::setTabCouleur(int new_tab_couleur[4])
     }
 }
 
+int Piece::operator[](int position){
+    if (position < 4) return getColor(position);
+    else return -1;
+}
 

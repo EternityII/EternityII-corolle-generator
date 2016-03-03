@@ -26,6 +26,8 @@ public:
 
     FileIn(int taille, string path);
 
+    FileIn(string path);
+
     Jeu initJeu();
 
 private:
