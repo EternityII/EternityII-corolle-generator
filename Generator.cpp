@@ -34,42 +34,6 @@ const int Generator::pieceTypeByPosition(int x, int y)
     }
 
 }
-
-/**
- * TODO : finir la fonction recursive
- *
- */
-void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, int ori_x, int ori_y)
-{
-
-    if (ori_x < 0 || ori_y < 0 || position_nb < 0 || orientation < 0) {
-        perror("Bad coordinates");
-        exit(EXIT_FAILURE);
-    }
-
-    int pos_x = 0,
-            pos_y = 0;
-    int to_x = 1,
-            to_y = 1;
-
-    if (orientation == SW) {
-        to_x = -1;
-    } else if (orientation == NE) {
-        to_y = -1;
-    } else if (orientation == NW) {
-        to_x = -1;
-        to_y = -1;
-    }
-
-    while (pos_x <= size && ori_x <= pos_x && ori_y >= pos_y) {
-        coordonnees[position_nb][POS_X] = ori_x + pos_x * to_x;
-        coordonnees[position_nb][POS_Y] = ori_y + pos_y * to_y;
-        coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(pos_x, pos_y);
-        pos_x++;
-        pos_y++;
-        position_nb++;
-    }
-}
 /**
  * Génère les coordonnées pour la création d'une corolle
  */
