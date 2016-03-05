@@ -70,6 +70,98 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
         position_nb++;
     }
 }
+/**
+ * Génère les coordonnées pour la création d'une corolle
+ */
+void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, int [] posxy, int iteration, bool nw)
+{
+/*
+position_nb = ordre de positionnement pour reformer la corolle.
+orientation = le sens du positionnement des pièces sur la corolle.
+size = taille du plateau
+posxy = coordonnées du point de départ
+iteration = entier pour savoir le nombre de pièce à placer dans une orientation.
+nw = booléen qui permet de stoper la récursivité.
+*/
+    if (posxy[POS_X] < 0 || posxy[POS_Y] < 0 || position_nb < 0 || orientation < 0) { 
+        perror("Bad coordinates");
+        exit(EXIT_FAILURE);
+    }
+    if (orientation == NW) {
+        
+        if(iteration == 0 || (iteration < hamming && nw == true)){
+            posxy[POS_Y]--; 
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                coordonnees[position_nb][POS_X] = posxy[POS_X];
+                coordonnees[position_nb][POS_Y] = posxy[POS_Y];
+                coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
+                position_nb++;
+            }
+            iteration++;
+            parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        } else if(iteration == hamming && nw == true) {
+            cout << "Le programme termine" << endl;
+            exit(EXIT_SUCCESS);
+        }
+        else {
+            for(int i = 0; i < iteration; i++) {
+                posxy[POS_X]++;
+                posxy[POS_Y]++;
+                if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                    coordonnees[position_nb][POS_X] = posxy[POS_X];
+                    coordonnees[position_nb][POS_Y] = posxy[POS_Y];
+                    coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
+                    position_nb++;
+                }
+            }
+            orientation = SW;
+            nw = true;
+            parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        }
+        
+    } else if (orientation == SW) {
+        for(int i = 0; i < iteration; i++) {
+            posxy[POS_X]--;
+            posxy[POS_Y]++;
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                coordonnees[position_nb][POS_X] = posxy[POS_X];
+                coordonnees[position_nb][POS_Y] = posxy[POS_Y];
+                coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
+                position_nb++;
+            }
+        }
+        orientation = SE;
+        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+    } else if (orientation == SE) {
+        for(int i = 0; i < iteration; i++) {
+            posxy[POS_X]--;
+            posxy[POS_Y]--;
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                coordonnees[position_nb][POS_X] = posxy[POS_X];
+                coordonnees[position_nb][POS_Y] = posxy[POS_Y];
+                coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
+                position_nb++;
+            }
+        }
+        orientation = NE;
+        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        
+    } else if (orientation == NE) {
+        for(int i = 0; i < iteration; i++) {
+            posxy[POS_X]++;
+            posxy[POS_Y]--;
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                coordonnees[position_nb][POS_X] = posxy[POS_X];
+                coordonnees[position_nb][POS_Y] = posxy[POS_Y];
+                coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
+                position_nb++;
+            }
+        }
+        orientation = NW;
+        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+    }
+    
+}
 
 void Generator::coordonneesCreator()
 {
@@ -111,8 +203,12 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
 
     corolle_hamming = hamming; // hamming de la corolle
     this->corolle_type = corolle_type;
+    int posxy [2] = {1,0}; //coordonnées de la pièce de départ.
+    parcoursDiagonal(position_nb,0,size,posxy,0,false);
+    //coordonneesCreator(); Du coup ça devient inutile
 
-    if (corolle_type == Corolle::C) {
+
+    /*if (corolle_type == Corolle::C) {
         // nombre de piece de la corolle suivant le type de la corolle a générer
 
         if (corolle_hamming == Corolle::HAMMING_1) {
@@ -136,9 +232,9 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
 
     } else {
         perror("Valeur de int corolle_type invalide");
-    }
+    }*/
 
-    coordonneesCreator();
+    
 }
 
 /**
