@@ -34,26 +34,26 @@ const int Generator::pieceTypeByPosition(int x, int y)
     }
 
 }
+
 /**
  * Génère les coordonnées pour la création d'une corolle
+ *
+ * @param int position_nb ordre de positionnement pour reformer la corolle.
+ * @param int orientation  le sens du positionnement des pièces sur la corolle.
+ * @param int size taille du plateau
+ * @param int posxy coordonnées du point de départ
+ * @param int iteration  entier pour savoir le nombre de pièce à placer dans une orientation.
+ * @param bool nw qui permet de stoper la récursivité.
  */
-void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, int [] posxy, int iteration, bool nw)
+void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, int posxy[], int iteration, bool nw)
 {
-/*
-position_nb = ordre de positionnement pour reformer la corolle.
-orientation = le sens du positionnement des pièces sur la corolle.
-size = taille du plateau
-posxy = coordonnées du point de départ
-iteration = entier pour savoir le nombre de pièce à placer dans une orientation.
-nw = booléen qui permet de stoper la récursivité.
-*/
     if (posxy[POS_X] < 0 || posxy[POS_Y] < 0 || position_nb < 0 || orientation < 0) { 
         perror("Bad coordinates");
         exit(EXIT_FAILURE);
     }
     if (orientation == NW) {
         
-        if(iteration == 0 || (iteration < hamming && nw == true)){
+        if(iteration == 0 || (iteration < corolle_hamming && nw)){
             posxy[POS_Y]--; 
             if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
                 coordonnees[position_nb][POS_X] = posxy[POS_X];
@@ -63,9 +63,9 @@ nw = booléen qui permet de stoper la récursivité.
             }
             iteration++;
             parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
-        } else if(iteration == hamming && nw == true) {
+        } else if(iteration == corolle_hamming && nw) {
             cout << "Le programme termine" << endl;
-            exit(EXIT_SUCCESS);
+            return;
         }
         else {
             for(int i = 0; i < iteration; i++) {
@@ -168,7 +168,7 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
     corolle_hamming = hamming; // hamming de la corolle
     this->corolle_type = corolle_type;
     int posxy [2] = {1,0}; //coordonnées de la pièce de départ.
-    parcoursDiagonal(position_nb,0,size,posxy,0,false);
+    parcoursDiagonal(position_nb,0,jeu_size,posxy,0,false);
     //coordonneesCreator(); Du coup ça devient inutile
 
 
