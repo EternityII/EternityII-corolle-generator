@@ -45,7 +45,7 @@ const int Generator::pieceTypeByPosition(int x, int y)
  * @param int iteration  entier pour savoir le nombre de pièce à placer dans une orientation.
  * @param bool nw qui permet de stoper la récursivité.
  */
-void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, int posxy[], int iteration, bool nw)
+void Generator::parcoursDiagonal(int &position_nb, int orientation, int posxy[], int iteration, bool se)
 {
     if (posxy[POS_X] < 0 || posxy[POS_Y] < 0 || position_nb < 0 || orientation < 0) { 
         perror("Bad coordinates");
@@ -53,17 +53,17 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
     }
     if (orientation == NW) {
         
-        if(iteration == 0 || (iteration < corolle_hamming && nw)){
+        if(iteration == 0 || (iteration < corolle_hamming && se)){
             posxy[POS_Y]--; 
-            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < jeu_size || posxy[POS_Y] >= 0 || posxy[POS_Y] < jeu_size) {
                 coordonnees[position_nb][POS_X] = posxy[POS_X];
                 coordonnees[position_nb][POS_Y] = posxy[POS_Y];
                 coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
                 position_nb++;
             }
             iteration++;
-            parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
-        } else if(iteration == corolle_hamming && nw) {
+            parcoursDiagonal(position_nb, orientation, posxy, iteration, se);
+        } else if(iteration == corolle_hamming && se) {
             cout << "Le programme termine" << endl;
             return;
         }
@@ -71,7 +71,7 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
             for(int i = 0; i < iteration; i++) {
                 posxy[POS_X]++;
                 posxy[POS_Y]++;
-                if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+                if(posxy[POS_X] >= 0 || posxy[POS_X] < jeu_size || posxy[POS_Y] >= 0 || posxy[POS_Y] < jeu_size) {
                     coordonnees[position_nb][POS_X] = posxy[POS_X];
                     coordonnees[position_nb][POS_Y] = posxy[POS_Y];
                     coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
@@ -79,15 +79,15 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
                 }
             }
             orientation = SW;
-            nw = true;
-            parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+            se = true;
+            parcoursDiagonal(position_nb, orientation, posxy, iteration, se);
         }
         
     } else if (orientation == SW) {
         for(int i = 0; i < iteration; i++) {
             posxy[POS_X]--;
             posxy[POS_Y]++;
-            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < jeu_size || posxy[POS_Y] >= 0 || posxy[POS_Y] < jeu_size) {
                 coordonnees[position_nb][POS_X] = posxy[POS_X];
                 coordonnees[position_nb][POS_Y] = posxy[POS_Y];
                 coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
@@ -95,12 +95,12 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
             }
         }
         orientation = SE;
-        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        parcoursDiagonal(position_nb, orientation, posxy, iteration, se);
     } else if (orientation == SE) {
         for(int i = 0; i < iteration; i++) {
             posxy[POS_X]--;
             posxy[POS_Y]--;
-            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < jeu_size || posxy[POS_Y] >= 0 || posxy[POS_Y] < jeu_size) {
                 coordonnees[position_nb][POS_X] = posxy[POS_X];
                 coordonnees[position_nb][POS_Y] = posxy[POS_Y];
                 coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
@@ -108,13 +108,13 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
             }
         }
         orientation = NE;
-        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        parcoursDiagonal(position_nb, orientation, posxy, iteration, se);
         
     } else if (orientation == NE) {
         for(int i = 0; i < iteration; i++) {
             posxy[POS_X]++;
             posxy[POS_Y]--;
-            if(posxy[POS_X] >= 0 || posxy[POS_X] < size || posxy[POS_Y] >= 0 || posxy[POS_Y] < size) {
+            if(posxy[POS_X] >= 0 || posxy[POS_X] < jeu_size || posxy[POS_Y] >= 0 || posxy[POS_Y] < jeu_size) {
                 coordonnees[position_nb][POS_X] = posxy[POS_X];
                 coordonnees[position_nb][POS_Y] = posxy[POS_Y];
                 coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(posxy[POS_X], posxy[POS_Y]);
@@ -122,7 +122,7 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation, int size, in
             }
         }
         orientation = NW;
-        parcoursDiagonal(position_nb,orientation,size,posxy,iteration,nw);
+        parcoursDiagonal(position_nb, orientation, posxy, iteration, se);
     }
     
 }
