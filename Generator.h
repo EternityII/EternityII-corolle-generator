@@ -59,9 +59,11 @@ private:
     int corolle_size;
     int corolle_hamming;
 
-    void parcoursDiagonal(int &position_nb, int orientation,int x,int y, int iteration);
-    void parcoursRecursif(int &position_nb,int x,int y);
-    void parcoursNord(int &position_nb,int x,int y);
+    void parcoursDiagonal(int &position_nb, int orientation, int x, int y, int iteration);
+
+    void parcoursRecursif(int &position_nb, int x, int y);
+
+    void incrementationHamming(int &position_nb, int x, int y);
 
     const int pieceTypeByPosition(int x, int y);
 

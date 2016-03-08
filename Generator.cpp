@@ -5,7 +5,7 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
 {
     cout << "Generator " << jeu.getSize() << endl;
     file_out = NULL;
-    
+
     jeu_size = jeu.getSize();
     for (int i = 0; i < JEU_PIECES_MAX; ++i) {
         disponibles[i] = true;
@@ -34,51 +34,24 @@ const int Generator::pieceTypeByPosition(int x, int y)
     }
 
 }
-/**
- * Définit l'ordre de parcours de la corolle en faisant appel à 2 fonctions annexe pour le positionnement digonale et le positionnement "Nord"
- * @param int corolle_type : le type de la corolle en fonction de la position de départ
- * @param int hamming : taille de la corolle
- */
-void Generator::parcoursRecursif(int &position_nb,int x,int y)
-{
-    parcoursNord(position_nb,x,y); //placement de la première pièce
-    int iteration = 1; // initialisation du nombre d'itération
-    while(iteration <= corolle_hamming){
-            y--; //On décrémente la position y pour 
-            parcoursNord(position_nb,x,y); //placement de la pièce d'origine qui va initialiser le parcours diagonal
-            parcoursDiagonal(position_nb,SE,x,y,iteration); // SE = orientation de départ
-            iteration++;
-    }
-}
-/**
- * Positionne une pièce au dessus de la précédente en utilisant les coordonnées d'origine x et y.
- * @param int corolle_type : le type de la corolle en fonction de la position de départ
- * @param int hamming : taille de la corolle
- */
-void Generator::parcoursNord(int &position_nb,int x,int y){
-    if(x >= 0 && x < jeu_size && y >= 0 && y < jeu_size) {
-        coordonnees[position_nb][POS_X] = x;
-        coordonnees[position_nb][POS_Y] = y;
-        coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(x, y);
-        position_nb++;
-    } 
-}
+
 /**
  * Positionnement diagonale des pièces,c'est cette fonction qui définit la forme de la corolle,
  * en changeant l'orientation du positionnement en fonction du hamming définit.
+ *
  * @param int position_nb ordre de positionnement pour reformer la corolle.
  * @param int orientation le sens du positionnement des pièces sur la corolle. initialement définit à 0
  * @param int x, position x d'origine
- * @param int y, position y d'origine 
+ * @param int y, position y d'origine
  * @param int iteration entier pour savoir le nombre de pièce à placer dans une orientation, dépend du hamming.
  */
-void Generator::parcoursDiagonal(int &position_nb, int orientation,int x,int y, int iteration)
+void Generator::parcoursDiagonal(int &position_nb, int orientation, int x, int y, int iteration)
 {
-    int to_x,to_y;
-    int temp_x,temp_y;
+    int to_x, to_y;
+    int temp_x, temp_y;
     int i;
-    do{
-        if(orientation == SE){
+    do {
+        if (orientation == SE) {
             to_x = 1;
             to_y = 1;
         } else if (orientation == SW) {
@@ -91,27 +64,62 @@ void Generator::parcoursDiagonal(int &position_nb, int orientation,int x,int y, 
             to_x = 1;
             to_y = -1;
         }
-        for(i = 0; i < iteration && (orientation != NE || i < iteration - 1); i++) {
-            temp_x = x + (i+1)*to_x;
-            temp_y = y + (i+1)*to_y;
-            if(temp_x >= 0 && temp_x < jeu_size && temp_y >= 0 && temp_y < jeu_size) {
+
+        for (i = 0; i < iteration && (orientation != NE || i < iteration - 1); i++) {
+            temp_x = x + (i + 1) * to_x;
+            temp_y = y + (i + 1) * to_y;
+            if (temp_x >= 0 && temp_x < jeu_size && temp_y >= 0 && temp_y < jeu_size) {
                 coordonnees[position_nb][POS_X] = temp_x;
                 coordonnees[position_nb][POS_Y] = temp_y;
                 coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(temp_x, temp_y);
                 position_nb++;
             }
         }
-        if(orientation == NE) {
+        if (orientation == NE) {
             orientation = SE;
         } else {
-           orientation++; 
+            orientation++;
         }
         x = temp_x;
         y = temp_y;
-    }while(orientation != SE);
-    
+    } while (orientation != SE);
+
     return;
 }
+
+/**
+ * Positionne une pièce au dessus de la précédente en utilisant les coordonnées d'origine x et y.
+ * @param int corolle_type : le type de la corolle en fonction de la position de départ
+ * @param int hamming : taille de la corolle
+ */
+void Generator::incrementationHamming(int &position_nb, int x, int y)
+{
+    if (x >= 0 && x < jeu_size && y >= 0 && y < jeu_size) {
+        coordonnees[position_nb][POS_X] = x;
+        coordonnees[position_nb][POS_Y] = y;
+        coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(x, y);
+        position_nb++;
+    }
+}
+
+/**
+ * Définit l'ordre de parcours de la corolle en faisant appel à 2 fonctions annexe pour le positionnement digonale et le positionnement "Nord"
+ * @param int corolle_type : le type de la corolle en fonction de la position de départ
+ * @param int hamming : taille de la corolle
+ */
+void Generator::parcoursRecursif(int &position_nb, int x, int y)
+{
+    incrementationHamming(position_nb, x, y); //placement de la première pièce
+    int iteration = 1; // initialisation du nombre d'itération
+    while (iteration <= corolle_hamming) {
+        y--; //On décrémente la position y pour
+        incrementationHamming(position_nb, x,
+                              y); //placement de la pièce d'origine qui va initialiser le parcours diagonal
+        parcoursDiagonal(position_nb, SE, x, y, iteration); // SE = orientation de départ
+        iteration++;
+    }
+}
+
 /**
  * Initialise l'ordre de parcours
  * @param int corolle_type : le type de la corolle en fonction de la position de départ
@@ -128,20 +136,20 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
     int position_nb = 0;
 
 
-    if(x < 0 || y < 0 || position_nb < 0 || corolle_hamming < 0){
+    if (x < 0 || y < 0 || position_nb < 0 || corolle_hamming < 0) {
         cerr << "Bad coordinates";
         exit(EXIT_FAILURE);
     }
-    
-    parcoursRecursif(position_nb,x,y);
+
+    parcoursRecursif(position_nb, x, y);
 
     // TODO : a enlever test case
-    for(int i = 0; i < 25;i++){
-        for(int j = 0; j < 3; j++){
+    for (int i = 0; i < 25; i++) {
+        for (int j = 0; j < 3; j++) {
             cout << coordonnees[i][j] << " ";
         }
         cout << " " << endl;
-    }  
+    }
 }
 
 /**
