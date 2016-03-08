@@ -41,10 +41,10 @@ private:
     static const int JEU_SIZE_MAX = 16;
     static const int JEU_PIECES_MAX = 256;
 
-    static const int NW = 0;
-    static const int NE = 1;
-    static const int SE = 2;
-    static const int SW = 3;
+    static const int SE = 0;
+    static const int SW = 1;
+    static const int NW = 2;
+    static const int NE = 3;
 
     Jeu jeu;
 
@@ -59,11 +59,11 @@ private:
     int corolle_size;
     int corolle_hamming;
 
-    void parcoursDiagonal(int &position_nb, int orientation, int size, int ori_x, int ori_y);
+    void parcoursDiagonal(int &position_nb, int orientation,int x,int y, int iteration);
+    void parcoursRecursif(int &position_nb,int x,int y);
+    void parcoursNord(int &position_nb,int x,int y);
 
     const int pieceTypeByPosition(int x, int y);
-
-    void coordonneesCreator();
 
     void prerequisGeneration(int corolle_type, int hamming);
 
