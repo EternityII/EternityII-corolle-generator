@@ -14,6 +14,12 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
     cout << "End Generator " << endl;
 }
 
+/**
+ * Retourne le type de pièce suivant les coordonnée x et y
+ *
+ * @param int x
+ * @param int y
+ */
 const int Generator::pieceTypeByPosition(int x, int y)
 {
     //cout << "PieceTypeByPosition" << endl;
@@ -39,7 +45,8 @@ const int Generator::pieceTypeByPosition(int x, int y)
 }
 
 /**
- * Ajoute les coordonnées x et y à la position, si x et y existent
+ * Ajoute une la coordonnée x,y à la position voulue, si x et y existent. Incrémente la position
+ *
  * @param int &position_nb position a laquelle places les coordonnées
  * @param int x coordonnées x à verifier
  * @param int y coordonnées y à vérifier
@@ -54,6 +61,15 @@ void Generator::addCoordinate(int &position_nb, int x, int y)
     }
 }
 
+/**
+ * Positionne les coordonnées en diagonale.
+ *
+ * @param int position_nb ordre de positionnement pour reformer la corolle.
+ * @param int x, position x d'origine
+ * @param int y, position y d'origine
+ * @param int direction de la diagonale.
+ * @param int length longueur de la diagonale.
+ */
 void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length)
 {
     if (position_nb < 0 || orientation < 0 || length < 0) {
@@ -88,17 +104,19 @@ void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation
 }
 
 /**
- * Définit l'ordre de parcours de la corolle en faisant appel à 2 fonctions annexe pour le positionnement digonale et le positionnement "Nord"
- * corolle_hamming > 0
+ * Définit l'ordre de parcours de la corolle.
+ *
+ * @param int x coordonnée x d'origine
+ * @param int y coordonnée y d'origine
  */
 void Generator::coordinatesCreator(int x, int y)
 {
     int position_nb = 0; // pièce en position 0, Initialisation du parcours
 
     addCoordinate(position_nb, x, y); // pièce initiale
-    y--;
+    y--;// HAMMING 1
 
-    for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {
+    for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {  // HAMMING <= 1 ?
 
         int walking_x = x, walking_y = y;
         //placement de la pièce NORD qui va initialiser le parcours diagonal.
@@ -117,6 +135,8 @@ void Generator::coordinatesCreator(int x, int y)
  * Initialise l'ordre de parcours
  * @param int corolle_type : le type de la corolle en fonction de la position de départ
  * @param int hamming : taille de la corolle
+ *
+ * TODO : @deprecated, a fusionner avec initGeneration
  */
 void Generator::prerequisGeneration(int corolle_type, int hamming)
 {
