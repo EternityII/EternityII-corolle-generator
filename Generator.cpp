@@ -19,80 +19,32 @@ const int Generator::pieceTypeByPosition(int x, int y)
     //cout << "PieceTypeByPosition" << endl;
     if (x == 0 && y == 0) {
         return POS_TYPE_COIN_NW;
-    } /*else if (x == jeu_size - 1 && y == 0) {
+    } else if (x == jeu_size - 1 && y == 0) {
         return POS_TYPE_COIN_NE;
     } else if (x == jeu_size - 1 && y == jeu_size - 1) {
         return POS_TYPE_COIN_SE;
     } else if (x == 0 && y == jeu_size - 1) {
         return POS_TYPE_COIN_SW;
-    }*/ else if (x == 0) {
+    } else if (x == 0) {
         return POS_TYPE_BORD_LEFT;
     } else if (y == 0) {
         return POS_TYPE_BORD_TOP;
+    } else if (x == jeu_size - 1) {
+        return POS_TYPE_BORD_RIGHT;
+    } else if (y == jeu_size - 1) {
+        return POS_TYPE_BORD_BOTTOM;
     } else {
         return POS_TYPE_INTERIEUR;
     }
-
 }
 
 /**
- * Positionnement diagonale des pièces,c'est cette fonction qui définit la forme de la corolle,
- * en changeant l'orientation du positionnement en fonction du hamming définit.
- *
- * @param int position_nb ordre de positionnement pour reformer la corolle.
- * @param int orientation le sens du positionnement des pièces sur la corolle. initialement définit à 0
- * @param int x, position x d'origine
- * @param int y, position y d'origine
- * @param int iteration entier pour savoir le nombre de pièce à placer dans une orientation, dépend du hamming.
+ * Ajoute les coordonnées x et y à la position, si x et y existent
+ * @param int &position_nb position a laquelle places les coordonnées
+ * @param int x coordonnées x à verifier
+ * @param int y coordonnées y à vérifier
  */
-void Generator::parcoursDiagonal(int &position_nb, int orientation, int x, int y, int iteration)
-{
-    int to_x, to_y;
-    int temp_x, temp_y;
-    int i;
-    do {
-        if (orientation == SE) {
-            to_x = 1;
-            to_y = 1;
-        } else if (orientation == SW) {
-            to_x = -1;
-            to_y = 1;
-        } else if (orientation == NW) {
-            to_x = -1;
-            to_y = -1;
-        } else if (orientation == NE) {
-            to_x = 1;
-            to_y = -1;
-        }
-
-        for (i = 0; i < iteration && (orientation != NE || i < iteration - 1); i++) {
-            temp_x = x + (i + 1) * to_x;
-            temp_y = y + (i + 1) * to_y;
-            if (temp_x >= 0 && temp_x < jeu_size && temp_y >= 0 && temp_y < jeu_size) {
-                coordonnees[position_nb][POS_X] = temp_x;
-                coordonnees[position_nb][POS_Y] = temp_y;
-                coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(temp_x, temp_y);
-                position_nb++;
-            }
-        }
-        if (orientation == NE) {
-            orientation = SE;
-        } else {
-            orientation++;
-        }
-        x = temp_x;
-        y = temp_y;
-    } while (orientation != SE);
-
-    return;
-}
-
-/**
- * Positionne une pièce au dessus de la précédente en utilisant les coordonnées d'origine x et y.
- * @param int corolle_type : le type de la corolle en fonction de la position de départ
- * @param int hamming : taille de la corolle
- */
-void Generator::incrementationHamming(int &position_nb, int x, int y)
+void Generator::addCoordinate(int &position_nb, int x, int y)
 {
     if (x >= 0 && x < jeu_size && y >= 0 && y < jeu_size) {
         coordonnees[position_nb][POS_X] = x;
@@ -102,22 +54,63 @@ void Generator::incrementationHamming(int &position_nb, int x, int y)
     }
 }
 
+void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length)
+{
+    if (position_nb < 0 || orientation < 0 || length < 0) {
+        perror("Invalid diagonalWalker values");
+        exit(EXIT_FAILURE);
+    }
+
+    int walker_x = x,
+            walker_y = y;
+    int to_x = 1,
+            to_y = 1;
+
+    if (orientation == SW) {
+        to_x = -1;
+    } else if (orientation == NE) {
+        to_y = -1;
+    } else if (orientation == NW) {
+        to_x = -1;
+        to_y = -1;
+    }
+
+    for (int i = 1; i <= length; ++i) {
+        walker_x = x + i * to_x;
+        walker_y = y + i * to_y;
+
+        addCoordinate(position_nb, walker_x, walker_y);
+    }
+
+    // Fin du parcours diagonal, passage des valeurs au parcours suivant
+    x = walker_x;
+    y = walker_y;
+}
+
 /**
  * Définit l'ordre de parcours de la corolle en faisant appel à 2 fonctions annexe pour le positionnement digonale et le positionnement "Nord"
- * @param int corolle_type : le type de la corolle en fonction de la position de départ
- * @param int hamming : taille de la corolle
+ * corolle_hamming > 0
  */
-void Generator::parcoursRecursif(int &position_nb, int x, int y)
+void Generator::coordinatesCreator(int x, int y)
 {
-    incrementationHamming(position_nb, x, y); //placement de la première pièce
-    int iteration = 1; // initialisation du nombre d'itération
-    while (iteration <= corolle_hamming) {
-        y--; //On décrémente la position y pour
-        incrementationHamming(position_nb, x,
-                              y); //placement de la pièce d'origine qui va initialiser le parcours diagonal
-        parcoursDiagonal(position_nb, SE, x, y, iteration); // SE = orientation de départ
-        iteration++;
+    int position_nb = 0; // pièce en position 0, Initialisation du parcours
+
+    addCoordinate(position_nb, x, y); // pièce initiale
+    y--;
+
+    for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {
+
+        int walking_x = x, walking_y = y;
+        //placement de la pièce NORD qui va initialiser le parcours diagonal.
+        addCoordinate(position_nb, walking_x, walking_y);
+        diagonalWalker(position_nb, walking_x, walking_y, SE, iteration); // Génération des coordonnées vers le SE
+        diagonalWalker(position_nb, walking_x, walking_y, SW, iteration); // vers le SW
+        diagonalWalker(position_nb, walking_x, walking_y, NW, iteration); // vers le NW
+        diagonalWalker(position_nb, walking_x, walking_y, NE, iteration - 1); // vers le NE sans la dernière valeur
+        y--; //On décrémente la position y : on incrémente le hamming
     }
+
+    corolle_size = position_nb; // Taille de la corolle
 }
 
 /**
@@ -131,25 +124,26 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
 
     corolle_hamming = hamming; // hamming de la corolle
     this->corolle_type = corolle_type;
+
+    // TODO : passage dynamique de valeur
     int x = 1;
     int y = 1;
-    int position_nb = 0;
 
-
-    if (x < 0 || y < 0 || position_nb < 0 || corolle_hamming < 0) {
+    if (x < 0 || y < 0 || corolle_hamming < 0) {
         cerr << "Bad coordinates";
         exit(EXIT_FAILURE);
     }
 
-    parcoursRecursif(position_nb, x, y);
+    coordinatesCreator(x, y);
 
     // TODO : a enlever test case
     for (int i = 0; i < 25; i++) {
         for (int j = 0; j < 3; j++) {
             cout << coordonnees[i][j] << " ";
         }
-        cout << " " << endl;
+        cout << endl;
     }
+    cout << corolle_size << endl;
 }
 
 /**
@@ -168,9 +162,10 @@ void Generator::initGeneration(int corolle_type, int hamming)
         jeu.getJeu()[i].toStringDetail();
     }
 
-
     int position = 0; // initialisation du parcours
+
     generationRecursive(position);
+
     if (file_out->isOpen()) {
         file_out->close(); //fermeture eventuels des fichiers ouverts
     }

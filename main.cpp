@@ -13,5 +13,5 @@ int main()
     Jeu jeu = file_in.initJeu();
 
     Generator generator(jeu);
-    generator.initGeneration(Corolle::C, Corolle::HAMMING_2); // Triangle en hamming de 1
+    generator.initGeneration(Corolle::C, Corolle::HAMMING_3); // Triangle en hamming de 1
 }
