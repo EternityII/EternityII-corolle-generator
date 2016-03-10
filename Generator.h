@@ -16,7 +16,9 @@ class Generator
 public:
     Generator(Jeu jeu);
 
-    void initGeneration(int corolle_type, int hamming);
+    void multipleGeneration();
+
+    void initGeneration(int x, int y, int hamming);
 
 private:
 
@@ -66,8 +68,6 @@ private:
     void addCoordinate(int &position_nb, int x, int y);
 
     const int pieceTypeByPosition(int x, int y);
-
-    void prerequisGeneration(int corolle_type, int hamming);
 
     static const bool compareColors(Piece a, Piece b, int side_a, int side_b);
 

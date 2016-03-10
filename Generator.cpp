@@ -130,24 +130,42 @@ void Generator::coordinatesCreator(int x, int y)
 
     corolle_size = position_nb; // Taille de la corolle
 }
+/*
+* Initialise la génération multiple de toutes les corolles possibles en fonction de la taille du jeu
+*/
+void Generator::multipleGeneration()
+{
+    int y = 0;
+    int reduc;
+    if(jeu_size % 2 == 1) {
+        reduc = ((jeu_size - 1) / 2) + 1;
+    } else {
+        reduc = jeu_size / 2;
+    }
+    for(int j = 0; j < reduc; j++)
+    {
+        for(int i = y; i < reduc; i++)
+        {
+            for (int hamming = 1; hamming < 4; hamming++)
+            {
+                initGeneration(i,j,hamming);
+            }
+        }
+        y++;
+    }
+}
 
 /**
- * Initialise l'ordre de parcours
- * @param int corolle_type : le type de la corolle en fonction de la position de départ
- * @param int hamming : taille de la corolle
- *
- * TODO : @deprecated, a fusionner avec initGeneration
+ * Lance la génération des possibilités de la corolle et initialise l'ordre du parcours
+ * @param int x coordonnée x de la position initiale
+ * @param int y coordonnée y de la position initiale
+ * @param int hamming hamming de la corolle
  */
-void Generator::prerequisGeneration(int corolle_type, int hamming)
+void Generator::initGeneration(int x, int y, int hamming)
 {
-    cout << "prerequisGeneration" << endl;
 
+    cout << "InitGeneration : " << x << " " << y << " " << hamming << endl; // preparation de tous les elements utilises dans la recursivite
     corolle_hamming = hamming; // hamming de la corolle
-    this->corolle_type = corolle_type;
-
-    // TODO : passage dynamique de valeur
-    int x = 1;
-    int y = 1;
 
     if (x < 0 || y < 0 || corolle_hamming < 0) {
         cerr << "Bad coordinates";
@@ -157,26 +175,13 @@ void Generator::prerequisGeneration(int corolle_type, int hamming)
     coordinatesCreator(x, y);
 
     // TODO : a enlever test case
-    for (int i = 0; i < 25; i++) {
+    /*for (int i = 0; i < 25; i++) {
         for (int j = 0; j < 3; j++) {
             cout << coordonnees[i][j] << " ";
         }
         cout << endl;
     }
-    cout << corolle_size << endl;
-}
-
-/**
- * Lance la génération des possibilités de la corolle
- *
- * @param int type_corolle le type de la corolle.
- */
-void Generator::initGeneration(int corolle_type, int hamming)
-{
-
-    cout << "InitGeneration" << endl;
-    // preparation de tous les elements utilises dans la recursivite
-    prerequisGeneration(corolle_type, hamming);
+    cout << corolle_size << endl;*/
 
     for (int i = 0; i < jeu_size * jeu_size; ++i) {
         jeu.getJeu()[i].toStringDetail();
@@ -419,7 +424,8 @@ void Generator::generationRecursive(int &position)
             piece_tab[i] = plateau[coord_x][coord_y];
         }
         Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
-        cerr << corolle.toString() << endl;
+        
+        //cout << corolle.toString() << endl;
 
         writeInFile(corolle);
     }
