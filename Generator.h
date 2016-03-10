@@ -79,7 +79,11 @@ private:
 
     void writeInFile(Corolle &corolle);
 
-    void generationRecursive(int &position);
+    void generationRecursive(int &position,int position_min);
+
+    void genererHamming(int hamming, int &position);
+
+    void placerCorolle(int &position, int id_pieces[], int length_corolle);
 };
 
 

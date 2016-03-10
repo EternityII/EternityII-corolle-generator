@@ -159,11 +159,56 @@ void Generator::initGeneration(int corolle_type, int hamming)
 
 
     int position = 0; // initialisation du parcours
-    generationRecursive(position);
+    generationRecursive(position,0);
     if (file_out->isOpen()) {
         file_out->close(); //fermeture eventuels des fichiers ouverts
     }
+
 }
+
+void Generator::genererHamming(int hamming, int &position){
+
+    ifstream in_file;
+
+    if(hamming >= 1){
+        in_file.open("hamming");
+        if(in_file){ //Si le fichier n'existe pas 
+            generationRecursive(position,0);
+        }
+    }
+    else {
+        if(hamming>=1){
+            in_file.open("Hamming -1");
+            if (in_file){
+                string str = "";
+                //Recuperer la taille de la corolle
+                for (int i=0;i<5;i++){
+                    //Saute les premières lignes pour recuperer la taille de la corolle
+                    getline(in_file,str);
+                }
+
+                int tailleCorolle = 0;
+                in_file >> tailleCorolle;
+                corolle_size = tailleCorolle;
+
+                int id_pieces [corolle_size];
+                for(int i=0;i<corolle_size;i++){
+                    in_file >> id_pieces[i];
+                }
+            
+                placerCorolle(position,id_pieces,corolle_size);
+                generationRecursive(position,corolle_size);
+
+            }
+            else { //Le fichier n'existe pas
+                genererHamming(hamming-1,position);
+                genererHamming(hamming,position);
+            }
+        }
+    }
+}
+
+
 
 /**
  * Compare deux bord de deux pièces
@@ -266,6 +311,14 @@ void Generator::putPiece(int x, int y, Piece piece)
     disponibles[piece.getId()] = false;
 }
 
+void Generator::placerCorolle(int &position, int id_pieces[], int length_corolle){
+    for (int i = 0; i < length_corolle; ++i)
+    {
+        putPiece(coordonnees[i][POS_X],coordonnees[i][POS_Y], jeu.getJeu()[id_pieces[i]]);
+        ++position;
+    }
+}
+
 /**
  * Enleve la piece du plateau
  */
@@ -288,13 +341,13 @@ void Generator::writeInFile(Corolle &corolle)
             delete file_out;
 
             file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                                   corolle.getRotation());
+                                   corolle.getRotation(),corolle.getSize());
             file_out->open();
             file_out->put(corolle);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
         file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                               corolle.getRotation());
+                               corolle.getRotation(),corolle_size);
         file_out->open();
         file_out->put(corolle);
     }
@@ -306,9 +359,11 @@ void Generator::writeInFile(Corolle &corolle)
  * Génére et parcours récursivement l'arbre des possibilités
  *
  */
-void Generator::generationRecursive(int &position)
+void Generator::generationRecursive(int &position, int position_min)
 {
-    if (position < corolle_size) { // si la corolle est incomplete
+    if(position < position_min){
+        /// le vide magueule;
+    }else if (position < corolle_size) { // si la corolle est incomplete
         int position_type = coordonnees[position][POS_TYPE],
                 coord_x = coordonnees[position][POS_X],
                 coord_y = coordonnees[position][POS_Y];
@@ -331,7 +386,7 @@ void Generator::generationRecursive(int &position)
 
                     if (canPutPiece(piece_coin, coord_x, coord_y, position_type)) { // vérifie si la piece est placable
                         putPiece(coord_x, coord_y, piece_coin);
-                        generationRecursive(++position);
+                        generationRecursive(++position,position_min);
                         --position;
                         pickOffPiece(piece_coin.getId(), coord_x, coord_y);
                     }
@@ -358,7 +413,7 @@ void Generator::generationRecursive(int &position)
                     if (canPutPiece(piece_bord, coord_x, coord_y, position_type)) { // verifie si on peut la placer
                         putPiece(coord_x, coord_y, piece_bord);
                         ++position;
-                        generationRecursive(position);
+                        generationRecursive(position,position_min);
                         --position;
                         pickOffPiece(piece_bord.getId(), coord_x, coord_y);
                     }
@@ -376,7 +431,7 @@ void Generator::generationRecursive(int &position)
 
                         if (canPutPiece(piece_interieur, coord_x, coord_y, position_type)) {// si la piece est placable
                             putPiece(coord_x, coord_y, piece_interieur);
-                            generationRecursive(++position);
+                            generationRecursive(++position,position_min);
                             --position; // fin de la corolle dépilage
                             pickOffPiece(piece_interieur.getId(), coord_x, coord_y);
                         }

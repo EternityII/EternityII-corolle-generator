@@ -2,9 +2,9 @@ using namespace std;
 
 #include "FileOut.h"
 
-FileOut::FileOut(int size, int corolle_hamming, int corolle_type, int piece_number, int rotation)
+FileOut::FileOut(int size, int corolle_hamming, int corolle_type, int piece_number, int rotation, int corolle_size)
         : size(size), corolle_hamming(corolle_hamming), corolle_type(corolle_type), piece_number(piece_number),
-          rotation(rotation)
+          rotation(rotation),corolle_size(corolle_size)
 { }
 
 void FileOut::open()
@@ -20,6 +20,8 @@ void FileOut::open()
     fichier << corolle_type << "\n";
     fichier << piece_number << "\n";
     fichier << rotation << "\n";
+    fichier << corolle_size << "\n";
+
 
 }
 
