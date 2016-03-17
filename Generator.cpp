@@ -231,7 +231,7 @@ const bool Generator::compareSides(Piece piece, int x, int y, int side_to_compar
         if (plateau[x][y + 1].getId() == -1) {
             return true;
         } else {
-            return compareColors(piece, plateau[x][y - 1], Piece::BOTTOM, Piece::TOP);
+            return compareColors(piece, plateau[x][y + 1], Piece::BOTTOM, Piece::TOP);
         }
     } else if (side_to_compare == Piece::LEFT && x > 0) { // on verifie a gauche
         if (plateau[x - 1][y].getId() == -1) {
