@@ -15,4 +15,5 @@ int main()
 
     Generator generator(jeu);
     generator.initGeneration(Corolle::C, Corolle::HAMMING_2); // Triangle en hamming de 1
-}
+
+ }

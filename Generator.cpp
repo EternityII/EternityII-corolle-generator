@@ -186,7 +186,14 @@ void Generator::genererHamming(int hamming, int &position){
 
                     in_file.open(output_path.str().c_str(), ios::out);
                     if(!in_file.good()){ //Si le fichier n'existe pas
-                        initGeneration(Corolle::C,hamming);
+                         prerequisGeneration(corolle_type, hamming);
+
+                        for (int i = 0; i < jeu_size * jeu_size; ++i) {
+                            jeu.getJeu()[i].toStringDetail();
+                        }
+                        int position = 0; // initialisation du parcours
+                        generationRecursive(position,0);
+                        //initGeneration(Corolle::C,hamming);
                     }
                     output_path.str("");
                     output_path.clear();
