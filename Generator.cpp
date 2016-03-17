@@ -130,6 +130,7 @@ void Generator::coordinatesCreator(int x, int y)
 
     corolle_size = position_nb; // Taille de la corolle
 }
+
 /*
 * Initialise la génération multiple de toutes les corolles possibles en fonction de la taille du jeu
 */
@@ -137,18 +138,15 @@ void Generator::multipleGeneration()
 {
     int y = 0;
     int reduc;
-    if(jeu_size % 2 == 1) {
+    if (jeu_size % 2 == 1) {
         reduc = ((jeu_size - 1) / 2) + 1;
     } else {
         reduc = jeu_size / 2;
     }
-    for(int j = 0; j < reduc; j++)
-    {
-        for(int i = y; i < reduc; i++)
-        {
-            for (int hamming = 1; hamming < 4; hamming++)
-            {
-                initGeneration(i,j,hamming);
+    for (int j = 0; j < reduc; j++) {
+        for (int i = y; i < reduc; i++) {
+            for (int hamming = 1; hamming < 4; hamming++) {
+                initGeneration(i, j, hamming);
             }
         }
         y++;
@@ -164,7 +162,8 @@ void Generator::multipleGeneration()
 void Generator::initGeneration(int x, int y, int hamming)
 {
 
-    cout << "InitGeneration : " << x << " " << y << " " << hamming << endl; // preparation de tous les elements utilises dans la recursivite
+    cout << "InitGeneration : " << x << " " << y << " " << hamming <<
+    endl; // preparation de tous les elements utilises dans la recursivite
     corolle_hamming = hamming; // hamming de la corolle
 
     if (x < 0 || y < 0 || corolle_hamming < 0) {
@@ -424,7 +423,7 @@ void Generator::generationRecursive(int &position)
             piece_tab[i] = plateau[coord_x][coord_y];
         }
         Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
-        
+
         //cout << corolle.toString() << endl;
 
         writeInFile(corolle);
