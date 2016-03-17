@@ -23,7 +23,7 @@ public:
     int corolle_type;
     int piece_number;
     int rotation;
-
+    int corolle_size;
     ofstream fichier;
 
     FileOut()
@@ -33,7 +33,7 @@ public:
     { };
 
     FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
-            int rotation);
+            int rotation,int corolle_size);
 
     void open();
 

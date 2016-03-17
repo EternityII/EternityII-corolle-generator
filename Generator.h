@@ -61,6 +61,9 @@ private:
     int corolle_size;
     int corolle_hamming;
 
+    int nb_noeuds;
+    int nb_solutions;
+
     void diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length);
 
     void coordinatesCreator(int ori_x, int ori_y);
@@ -82,6 +85,12 @@ private:
     void writeInFile(Corolle &corolle);
 
     void generationRecursive(int &position);
+
+    void putPieceEvent();
+
+    void pickOffPieceEvent();
+
+    void solutionFoundEvent();
 };
 
 

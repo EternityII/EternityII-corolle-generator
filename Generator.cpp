@@ -6,6 +6,8 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
     cout << "Generator " << jeu.getSize() << endl;
     file_out = NULL;
 
+    nb_noeuds = 0;
+
     jeu_size = jeu.getSize();
     for (int i = 0; i < JEU_PIECES_MAX; ++i) {
         disponibles[i] = true;
@@ -136,6 +138,7 @@ void Generator::coordinatesCreator(int x, int y)
 */
 void Generator::multipleGeneration()
 {
+    cout << "multipleGeneration()" << endl;
     int y = 0;
     int reduc;
     if (jeu_size % 2 == 1) {
@@ -143,10 +146,17 @@ void Generator::multipleGeneration()
     } else {
         reduc = jeu_size / 2;
     }
+
     for (int j = 0; j < reduc; j++) {
         for (int i = y; i < reduc; i++) {
             for (int hamming = 1; hamming < 4; hamming++) {
+                nb_noeuds = 0;
+                nb_solutions = 0;
+
                 initGeneration(i, j, hamming);
+
+                cout << "taille de l'arbre " << nb_noeuds << endl;
+                cout << "nombre de solutions " << nb_solutions << endl;
             }
         }
         y++;
@@ -162,7 +172,7 @@ void Generator::multipleGeneration()
 void Generator::initGeneration(int x, int y, int hamming)
 {
 
-    cout << "InitGeneration : " << x << " " << y << " " << hamming <<
+    cout << "# initGeneration(" << x << ", " << y << ", " << hamming << ")" <<
     endl; // preparation de tous les elements utilises dans la recursivite
     corolle_hamming = hamming; // hamming de la corolle
 
@@ -173,15 +183,6 @@ void Generator::initGeneration(int x, int y, int hamming)
 
     coordinatesCreator(x, y);
 
-    // TODO : a enlever test case
-    /*for (int i = 0; i < 25; i++) {
-        for (int j = 0; j < 3; j++) {
-            cout << coordonnees[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << corolle_size << endl;*/
-
     for (int i = 0; i < jeu_size * jeu_size; ++i) {
         jeu.getJeu()[i].toStringDetail();
     }
@@ -190,9 +191,9 @@ void Generator::initGeneration(int x, int y, int hamming)
 
     generationRecursive(position);
 
-    if (file_out->isOpen()) {
-        file_out->close(); //fermeture eventuels des fichiers ouverts
-    }
+    //if (file_out->isOpen()) {
+    //    file_out->close(); //fermeture eventuels des fichiers ouverts
+    //}
 }
 
 /**
@@ -231,7 +232,7 @@ const bool Generator::compareSides(Piece piece, int x, int y, int side_to_compar
         if (plateau[x][y + 1].getId() == -1) {
             return true;
         } else {
-            return compareColors(piece, plateau[x][y - 1], Piece::BOTTOM, Piece::TOP);
+            return compareColors(piece, plateau[x][y + 1], Piece::BOTTOM, Piece::TOP);
         }
     } else if (side_to_compare == Piece::LEFT && x > 0) { // on verifie a gauche
         if (plateau[x - 1][y].getId() == -1) {
@@ -292,6 +293,7 @@ const bool Generator::canPutPiece(Piece piece, int x, int y, int position_type)
  */
 void Generator::putPiece(int x, int y, Piece piece)
 {
+    putPieceEvent();
     plateau[x][y] = piece;
     disponibles[piece.getId()] = false;
 }
@@ -301,6 +303,7 @@ void Generator::putPiece(int x, int y, Piece piece)
  */
 void Generator::pickOffPiece(int numero_piece, int x, int y)
 {
+    pickOffPieceEvent();
     Piece piece_vide;
     plateau[x][y] = piece_vide;
     disponibles[numero_piece] = true;
@@ -318,13 +321,13 @@ void Generator::writeInFile(Corolle &corolle)
             delete file_out;
 
             file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                                   corolle.getRotation());
+                                   corolle.getRotation(), corolle_size);
             file_out->open();
             file_out->put(corolle);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
         file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                               corolle.getRotation());
+                               corolle.getRotation(), corolle_size);
         file_out->open();
         file_out->put(corolle);
     }
@@ -387,8 +390,7 @@ void Generator::generationRecursive(int &position)
 
                     if (canPutPiece(piece_bord, coord_x, coord_y, position_type)) { // verifie si on peut la placer
                         putPiece(coord_x, coord_y, piece_bord);
-                        ++position;
-                        generationRecursive(position);
+                        generationRecursive(++position);
                         --position;
                         pickOffPiece(piece_bord.getId(), coord_x, coord_y);
                     }
@@ -415,19 +417,22 @@ void Generator::generationRecursive(int &position)
             }
         }
     } else if (position == corolle_size) {
-        int coord_x, coord_y;
-        Piece piece_tab[corolle_size];
-        for (int i = 0; i < corolle_size; ++i) { // Creation de la corolle
-            coord_x = coordonnees[i][POS_X];
-            coord_y = coordonnees[i][POS_Y];
-            piece_tab[i] = plateau[coord_x][coord_y];
-        }
-        Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
-
-        //cout << corolle.toString() << endl;
-
-        writeInFile(corolle);
+        solutionFoundEvent();
     }
 }
 
-// Inutile pour l'instant
+// Evenements
+void Generator::putPieceEvent()
+{
+    nb_noeuds ++;
+}
+
+void Generator::pickOffPieceEvent()
+{
+
+}
+
+void Generator::solutionFoundEvent()
+{
+    nb_solutions ++;
+}

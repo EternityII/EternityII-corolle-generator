@@ -7,7 +7,7 @@ main : $(OBJECTS)
 	$(CC) $(FLAGS) -o $@ $^
 
 %.o : %.cpp %.h
-	$(CC) -o $@ -c $<
+	$(CC) $(FLAGS) -o $@ -c $<
 
 
 clean :
