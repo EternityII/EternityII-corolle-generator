@@ -168,69 +168,85 @@ void Generator::initGeneration(int corolle_type, int hamming)
 }
 
 void Generator::genererHamming(int hamming, int &position){
+
     cout << "Generer Hamming" << endl;
     ifstream in_file;
     ostringstream output_path;
 
     if(hamming == 1){
-
+    cout << "hamming == 1 " << endl;
         for(int i=0;i<jeu_size;i++){
             for(int j=0;j<jeu_size;j++){
-                for(int rot=0;rot<4;rot++){
+                for(int rot=1;rot<5;rot++){
                     
-                    output_path << "./output/";
+                    output_path << "/output/";
                     output_path << jeu_size;
                     output_path << "/" << hamming;
                     output_path << "_" << i << "_" << j << "_" << rot << ".txt";
-                    output_path.clear();
 
+                    in_file.open(output_path.str().c_str(), ios::out);
+                    if(!in_file.good()){ //Si le fichier n'existe pas
+                        initGeneration(Corolle::C,hamming);
+                    }
+                    output_path.str("");
+                    output_path.clear();
                 }
             }
-        }
-        in_file.open(output_path.str().c_str(), ios::out);
-        if(!in_file){ //Si le fichier n'existe pas 
-            generationRecursive(position,0);
         }
     }
     else {
         if(hamming>1){
             cout << "Hamming > 1 " << endl;
+            cout << "jeu_size " << jeu_size << endl;
+
             for(int i=0;i<jeu_size;i++){
                 for(int j=0;j<jeu_size;j++){
-                    for(int rot=0;rot<4;rot++){
-                        output_path << "./output/";
+                    for(int rot=1;rot<5;rot++){
+
+                        output_path << "/output/";
                         output_path << jeu_size;
                         output_path << "/" << hamming-1 ;
                         output_path << "_" << i << "_" << j << "_" << rot << ".txt";
+
+                        cout << output_path.str().c_str() << endl;
+
+                        in_file.open(output_path.str().c_str(), ios::out);
+
+                        if (in_file.good()){
+                            cout << "file good" << endl;
+                            string str = "";
+
+                            //Recuperer la taille de la corolle
+                            for (int i=0;i<5;i++){
+                                //Saute les premières lignes pour recuperer la taille de la corolle
+                                getline(in_file,str);
+                             }
+
+                            int tailleCorolle = 0;
+                            in_file >> tailleCorolle;
+                            corolle_size = tailleCorolle;
+
+                            cout << "corolle_size : " << corolle_size << endl;
+
+                            int id_pieces [corolle_size];
+                            for(int i=0;i<corolle_size;i++){
+                                in_file >> id_pieces[i];
+                            }
+                            placerCorolle(position,id_pieces,corolle_size);
+                            generationRecursive(position,corolle_size);
+                            in_file.close();
+                         
+                        } else { //Le fichier n'existe pas
+                            int position = 0;
+                            generationRecursive(position,0);
+                            corolle_hamming = hamming-1;
+                            genererHamming(hamming-1,position);
+                        }
+
+                        output_path.str("");
                         output_path.clear();
                     }
                 }
-            }
-            in_file.open(output_path.str().c_str(), ios::out);
-                if (in_file){
-                    string str = "";
-                    //Recuperer la taille de la corolle
-                    for (int i=0;i<5;i++){
-                    //Saute les premières lignes pour recuperer la taille de la corolle
-                    getline(in_file,str);
-                    }
-
-                    int tailleCorolle = 0;
-                    in_file >> tailleCorolle;
-                    corolle_size = tailleCorolle;
-
-                    int id_pieces [corolle_size];
-                    for(int i=0;i<corolle_size;i++){
-                        in_file >> id_pieces[i];
-                    }
-            
-                    placerCorolle(position,id_pieces,corolle_size);
-                    generationRecursive(position,corolle_size);
-                    in_file.close();
-                }
-                else { //Le fichier n'existe pas
-                    genererHamming(hamming-1,position);
-                    //genererHamming(hamming,position);
             }
         }
     }
@@ -476,7 +492,7 @@ void Generator::generationRecursive(int &position, int position_min)
             piece_tab[i] = plateau[coord_x][coord_y];
         }
         Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
-        cerr << corolle.toString() << endl;
+        //cerr << corolle.toString() << endl;
 
         writeInFile(corolle);
     }
