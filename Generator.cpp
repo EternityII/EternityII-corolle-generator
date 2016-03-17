@@ -317,14 +317,14 @@ void Generator::writeInFile(Corolle &corolle)
 
             delete file_out;
 
-            file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                                   corolle.getRotation());
+            file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(), corolle.getPosY(), corolle.getPieces()[0].getId(),
+                                   corolle.getRotation(), coordonnees);
             file_out->open();
             file_out->put(corolle);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
-        file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                               corolle.getRotation());
+        file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(), corolle.getPosY(), corolle.getPieces()[0].getId(),
+                               corolle.getRotation(), coordonnees);
         file_out->open();
         file_out->put(corolle);
     }
@@ -422,7 +422,7 @@ void Generator::generationRecursive(int &position)
             coord_y = coordonnees[i][POS_Y];
             piece_tab[i] = plateau[coord_x][coord_y];
         }
-        Corolle corolle(piece_tab, corolle_size, corolle_type, corolle_hamming);
+        Corolle corolle(piece_tab, corolle_size, coordonnees[0][POS_X], coordonnees[0][POS_Y], corolle_hamming);
 
         //cout << corolle.toString() << endl;
 

@@ -4,13 +4,14 @@ using namespace std;
 
 Corolle::Corolle()
 {
-    size = 4;
-    type = 1;
-    hamming = 1;
+    size = 0;
+    posx = 0;
+    posy = 0;
+    hamming = 0;
     rotation = 0;
 }
 
-Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) : size(size), type(type), hamming(hamming)
+Corolle::Corolle(const Piece pieces[], int size, int posx, int posy, int hamming) : size(size), posx(posx), posy(posy), hamming(hamming)
 {
     for (int i = 0; i < size; ++i) {
         this->pieces[i] = pieces[i];
@@ -21,7 +22,7 @@ Corolle::Corolle(const Piece pieces[], int size, int type, int hamming) : size(s
 
 Corolle::Corolle(const Corolle &corolle)
 {
-    Corolle(corolle.getPieces(), corolle.getSize(), corolle.getType(), corolle.getHamming());
+    Corolle(corolle.getPieces(), corolle.getSize(), corolle.getPosX(), corolle.getPosY(), corolle.getHamming());
 }
 
 const string Corolle::toString()
@@ -45,8 +46,11 @@ const int Corolle::getRotation() const
 const int Corolle::getHamming() const
 { return hamming; }
 
-const int Corolle::getType() const
-{ return type; }
+const int Corolle::getPosX() const
+{ return posx; }
+
+const int Corolle::getPosY() const
+{ return posy; }
 
 const int Corolle::getSize() const
 { return size; }
@@ -64,8 +68,11 @@ void Corolle::setRotation(int rotation)
 void Corolle::setHamming(int hamming)
 { this->hamming = hamming; }
 
-void Corolle::setType(int type)
-{ this->type = type; }
+void Corolle::setPosX(int posx)
+{ this->posx = posx; }
+
+void Corolle::setPosY(int posy)
+{ this->posy = posy; }
 
 void Corolle::setSize(int size)
 { this->size = size; }
