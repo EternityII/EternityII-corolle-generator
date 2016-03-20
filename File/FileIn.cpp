@@ -39,23 +39,20 @@ Jeu FileIn::initJeu()
                       if (size_in_file <= 0 || size_in_file > 16) return -1;
                       else {
                         size = size_in_file;
-                        cout << "size" << size << endl;
                       }
                 }
                 else {
                     in_file >> str;
                     getline(in_file,str);
-                    //cout << "Getline" << str << endl;
                 }
             }
              Jeu jeu(this->size);
 
             for (int i = 0; i < (size * size); i++) {
-                cout << i << endl;
+                //cout << i << endl;
                 for (int j = 0; j < 4; j++) {
                     in_file >> color;
                     couleur[j] = color;
-                    cout << "Couleur "<< color <<endl;
                 }
                 Piece p(i, couleur);
 
@@ -70,7 +67,7 @@ Jeu FileIn::initJeu()
 const string FileIn::getFileName() const
 {
     ostringstream s;// Barbarisme a l'état pur
-    s << "./assets/pieces_" << size << "x" << size << ".txt";
+    s << "assets/pieces_" << size << "x" << size << ".txt";
     return s.str();
 }
 

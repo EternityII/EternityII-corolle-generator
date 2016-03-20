@@ -3,7 +3,7 @@
 
 Generator::Generator(Jeu jeu) : jeu(jeu)
 {
-    cout << "Generator " << jeu.getSize() << endl;
+    cout << "Generator Constructor " << jeu.getSize() << endl;
     file_out = NULL;
 
     jeu_size = jeu.getSize();
@@ -11,7 +11,7 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
         disponibles[i] = true;
     }
 
-    cout << "End Generator " << endl;
+    cout << "end " << endl;
 }
 
 /**
@@ -147,7 +147,6 @@ void Generator::multipleGeneration(int hamming)
         for (int i = y; i < reduc; i++) {
             initGeneration(i, j, hamming);
         }
-        y++;
     }
 }
 
@@ -197,14 +196,6 @@ void Generator::genererHamming(int hamming)
     if (1 == hamming) { // Genere le hamming 1 si ce n'est deja fait
         cout << "hamming == 1 " << endl;
 
-<<<<<<< HEAD
-    int position = 0; // initialisation du parcours
-
-    generationRecursive(position);
-
-    if (file_out->isOpen()) {
-        file_out->close(); //fermeture eventuels des fichiers ouverts
-=======
         // on vérifie si le hamming 1 a été généré a cette position :
         // -> il existe au moins un fichier ayant ce hamming et cette position
         bool existe = false;
@@ -305,7 +296,7 @@ void Generator::genererHamming(int hamming)
                     in_file.open(output_path.str().c_str(), ios::out);
 
                     if (in_file.good()) { // un fichier existe
-                        cout << "ouverture du fichier de hamming fils : " << hamming - 1 << endl;
+                        cout << "Fichier hamming fils :" << hamming - 1 << ", x= " << ori_x << ", y=" << ori_y << endl;
 
                         string line;
                         int not_useful;
@@ -322,7 +313,6 @@ void Generator::genererHamming(int hamming)
 
                         int id_pieces[child_corolle_size][2];
 
-                        cout << "Creation du fichier de hamming " << hamming << endl;
 
                         while (!in_file.eof()) {
                             for (int l = 0; l < child_corolle_size; l++) { // on récupère l'ancienne corolle
@@ -332,7 +322,6 @@ void Generator::genererHamming(int hamming)
 
                             placerCorolle(id_pieces, child_corolle_size); // on la place dans le jeu
                             int position = child_corolle_size; // on part a partir de la fin de la corolle fils
-                            cout << "=";
                             generationRecursive(position);
                             enleverCorolle(id_pieces, child_corolle_size);
                         }
@@ -343,7 +332,6 @@ void Generator::genererHamming(int hamming)
                 }
             }
         }
->>>>>>> feature/importcorolle
     }
 }
 

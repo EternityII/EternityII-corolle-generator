@@ -9,12 +9,9 @@ using namespace std;
 int main()
 {
 
-    FileIn file_in("assets/pieces_5x5.txt");
-    Jeu jeu = file_in.initJeu();
-    cout << "Color" << jeu.getJeu()[3][3] << endl;
+    FileIn file_in(6);
 
     Jeu jeu = file_in.initJeu();
-    cout << "Color" << jeu.getJeu()[3][3] << endl;
 
     Generator generator(jeu);
     generator.multipleGeneration(3); //Génère toutes les corolles possible pour une taille de plateau.
