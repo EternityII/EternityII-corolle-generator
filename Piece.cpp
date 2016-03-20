@@ -32,7 +32,7 @@ Piece::Piece(int idPiece, int couleur[4]) : id(idPiece), rotation(0)
 const string Piece::toString()
 {
     ostringstream s;
-    s << id;
+    s << id << " " << rotation;
     return s.str();
 }
 
@@ -75,9 +75,11 @@ int Piece::getType()
 }
 
 //Setters
-void Piece::setRotation(int new_rotation)
+Piece Piece::setRotation(int new_rotation)
 {
     rotation = new_rotation;
+
+    return *this;
 }
 
 void Piece::setTabCouleur(int new_tab_couleur[4])
@@ -87,7 +89,10 @@ void Piece::setTabCouleur(int new_tab_couleur[4])
     }
 }
 
-int Piece::operator[](int position){
-    return getColor(position);
+int Piece::operator[](int position)
+{
+    if (position < 4) {
+        return couleur[(position + rotation) % 4];
+    } else { return -1; }
 }
 

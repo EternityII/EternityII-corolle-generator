@@ -109,14 +109,14 @@ void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation
  * @param int x coordonnée x d'origine
  * @param int y coordonnée y d'origine
  */
-void Generator::coordinatesCreator(int x, int y)
+void Generator::coordinatesCreator(int x, int y, const int hamming)
 {
     int position_nb = 0; // pièce en position 0, Initialisation du parcours
 
     addCoordinate(position_nb, x, y); // pièce initiale
     y--;// HAMMING 1
 
-    for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {  // HAMMING <= 1 ?
+    for (int iteration = 1; iteration <= hamming; ++iteration) {  // HAMMING <= 1 ?
 
         int walking_x = x, walking_y = y;
         //placement de la pièce NORD qui va initialiser le parcours diagonal.
@@ -134,7 +134,7 @@ void Generator::coordinatesCreator(int x, int y)
 /*
 * Initialise la génération multiple de toutes les corolles possibles en fonction de la taille du jeu
 */
-void Generator::multipleGeneration()
+void Generator::multipleGeneration(int hamming)
 {
     int y = 0;
     int reduc;
@@ -145,9 +145,7 @@ void Generator::multipleGeneration()
     }
     for (int j = 0; j < reduc; j++) {
         for (int i = y; i < reduc; i++) {
-            for (int hamming = 1; hamming < 4; hamming++) {
-                initGeneration(i, j, hamming);
-            }
+            initGeneration(i, j, hamming);
         }
         y++;
     }
@@ -171,7 +169,7 @@ void Generator::initGeneration(int x, int y, int hamming)
         exit(EXIT_FAILURE);
     }
 
-    coordinatesCreator(x, y);
+    coordinatesCreator(x, y, corolle_hamming);
 
     // TODO : a enlever test case
     /*for (int i = 0; i < 25; i++) {
@@ -182,16 +180,170 @@ void Generator::initGeneration(int x, int y, int hamming)
     }
     cout << corolle_size << endl;*/
 
-    for (int i = 0; i < jeu_size * jeu_size; ++i) {
-        jeu.getJeu()[i].toStringDetail();
+    genererHamming(hamming);
+    //generationRecursive(position,0);
+    if (!file_out == NULL && file_out->isOpen()) {
+        file_out->close(); //fermeture eventuels des fichiers ouverts
     }
+}
 
+void Generator::genererHamming(int hamming)
+{
+    ifstream in_file;
+
+    int ori_x = coordonnees[0][POS_X],
+            ori_y = coordonnees[0][POS_Y];
+
+    if (1 == hamming) { // Genere le hamming 1 si ce n'est deja fait
+        cout << "hamming == 1 " << endl;
+
+<<<<<<< HEAD
     int position = 0; // initialisation du parcours
 
     generationRecursive(position);
 
     if (file_out->isOpen()) {
         file_out->close(); //fermeture eventuels des fichiers ouverts
+=======
+        // on vérifie si le hamming 1 a été généré a cette position :
+        // -> il existe au moins un fichier ayant ce hamming et cette position
+        bool existe = false;
+
+        for (int id_piece = 0; id_piece < jeu_size * jeu_size; id_piece++) {
+            for (int rotation = 0; rotation < 4; ++rotation) {
+                // Construction des chemins vers le fichier
+                ostringstream output_path;
+
+                output_path << "output/";
+                output_path << jeu_size;
+                output_path << "/" << hamming;
+                output_path << "_" << ori_x << "_" << ori_y;
+                output_path << "_" << id_piece << "_" << rotation << ".txt";
+
+                in_file.open(output_path.str().c_str(), ios::out);
+
+                if (in_file.good()) { // un fichier existe
+                    existe = true;
+                    in_file.close(); // c'est mieux de fermer le fichier
+                    cout << "Le hamming 1 existe" << endl;
+                    break; // on sort de la boucle des rotations
+                }
+            }
+
+            if (existe) {// on sort de la boucle des id_pieces
+                break;
+            }
+        }
+
+        // bool existe : nous dit si le hamming a ete genere a cette position
+        if (!existe) {
+            cout << "Generation du hamming 1" << endl;
+
+            int position = 0; // initialisation du parcours
+            corolle_hamming = 1;
+            coordinatesCreator(ori_x, ori_y, corolle_hamming); // on redéfinit la position max
+            generationRecursive(position);
+        }
+    } else if (hamming > 1) {
+        cout << "Hamming = " << hamming << endl;
+
+        // on vérifie si le hamming a été généré a cette position :
+        // -> il existe au moins un fichier ayant ce hamming et cette position
+        // Le hamming est déja fait ?
+        bool fait = false;
+
+        for (int id_piece = 0; id_piece < jeu_size * jeu_size; id_piece++) {
+            for (int rotation = 0; rotation < 4; ++rotation) {
+                // Construction des chemins vers le fichier
+                ostringstream output_path;
+
+                output_path << "output/";
+                output_path << jeu_size;
+                output_path << "/" << hamming;
+                output_path << "_" << ori_x << "_" << ori_y;
+                output_path << "_" << id_piece << "_" << rotation << ".txt";
+
+                in_file.open(output_path.str().c_str(), ios::out);
+
+                if (in_file.good()) { // un fichier existe !
+                    fait = true;
+                    in_file.close();
+                    cout << "Le hamming " << hamming << " existe" << endl;
+                    break; // on sort de la boucle des rotations
+                }
+            }
+
+            if (fait) {// on sort de la boucle des id_pieces
+                break;
+            }
+        }
+
+        if (!fait) { // le hamming n'est pas fait !
+            // on genere le hamming-1
+            genererHamming(hamming - 1);
+
+            cout << "Generation du hamming " << hamming << endl;
+
+            // on fait le hamming a partir du hamming - 1
+            corolle_hamming = hamming;
+            coordinatesCreator(ori_x, ori_y, corolle_hamming); // on rafraichit le nombre de piece de la corolle
+
+            ori_x = coordonnees[0][POS_X];
+            ori_y = coordonnees[0][POS_Y];
+
+            // on parcours tout les fichiers hamming_fils existants
+            for (int id_piece = 0; id_piece < jeu_size * jeu_size; id_piece++) {
+                for (int rotation = 0; rotation < 4; ++rotation) {
+                    // Construction des chemins vers le fichier
+                    ostringstream output_path;
+                    output_path << "output/";
+                    output_path << jeu_size;
+                    output_path << "/" << hamming - 1;
+                    output_path << "_" << ori_x << "_" << ori_y;
+                    output_path << "_" << id_piece << "_" << rotation << ".txt";
+
+                    in_file.open(output_path.str().c_str(), ios::out);
+
+                    if (in_file.good()) { // un fichier existe
+                        cout << "ouverture du fichier de hamming fils : " << hamming - 1 << endl;
+
+                        string line;
+                        int not_useful;
+                        int child_corolle_size;
+                        getline(in_file, line); // on ignore le nom du fichier
+                        getline(in_file, line); // on ignore les eventuels commentaires
+                        getline(in_file, line); // on ignore la syntaxe
+
+                        in_file >> not_useful; // la taille du jeu
+                        in_file >> child_corolle_size; // La taille de la corolle
+
+                        getline(in_file, line); // le reste n'est pas utile
+                        getline(in_file, line); // par utile pour la generation
+
+                        int id_pieces[child_corolle_size][2];
+
+                        cout << "Creation du fichier de hamming " << hamming << endl;
+
+                        while (!in_file.eof()) {
+                            for (int l = 0; l < child_corolle_size; l++) { // on récupère l'ancienne corolle
+                                in_file >> id_pieces[l][0];
+                                in_file >> id_pieces[l][1];
+                            }
+
+                            placerCorolle(id_pieces, child_corolle_size); // on la place dans le jeu
+                            int position = child_corolle_size; // on part a partir de la fin de la corolle fils
+                            cout << "=";
+                            generationRecursive(position);
+                            enleverCorolle(id_pieces, child_corolle_size);
+                        }
+                        cout << endl;
+
+                        in_file.close();
+                    }
+                }
+            }
+        }
+>>>>>>> feature/importcorolle
     }
 }
 
@@ -205,7 +357,7 @@ void Generator::initGeneration(int x, int y, int hamming)
  */
 const bool Generator::compareColors(Piece a, Piece b, int side_a, int side_b)
 {
-    return a.getColor(side_a) == b.getColor(side_b);
+    return a[side_a] == b[side_b];
 }
 
 /**
@@ -296,6 +448,21 @@ void Generator::putPiece(int x, int y, Piece piece)
     disponibles[piece.getId()] = false;
 }
 
+void Generator::placerCorolle(int id_pieces[][2], int length_corolle)
+{
+    for (int i = 0; i < length_corolle; ++i) {
+        putPiece(coordonnees[i][POS_X], coordonnees[i][POS_Y],
+                 jeu.getJeu()[id_pieces[i][0]].setRotation(id_pieces[i][1]));
+    }
+}
+
+void Generator::enleverCorolle(int id_pieces[][2], int length_corolle)
+{
+    for (int i = 0; i < length_corolle; ++i) {
+        pickOffPiece(id_pieces[i][0], coordonnees[i][POS_X], coordonnees[i][POS_Y]);
+    }
+}
+
 /**
  * Enleve la piece du plateau
  */
@@ -317,13 +484,15 @@ void Generator::writeInFile(Corolle &corolle)
 
             delete file_out;
 
-            file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(), corolle.getPosY(), corolle.getPieces()[0].getId(),
+            file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(),
+                                   corolle.getPosY(), corolle.getPieces()[0].getId(),
                                    corolle.getRotation(), coordonnees);
             file_out->open();
             file_out->put(corolle);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
-        file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(), corolle.getPosY(), corolle.getPieces()[0].getId(),
+        file_out = new FileOut(jeu_size, corolle.getSize(), corolle.getHamming(), corolle.getPosX(), corolle.getPosY(),
+                               corolle.getPieces()[0].getId(),
                                corolle.getRotation(), coordonnees);
         file_out->open();
         file_out->put(corolle);
@@ -387,8 +556,7 @@ void Generator::generationRecursive(int &position)
 
                     if (canPutPiece(piece_bord, coord_x, coord_y, position_type)) { // verifie si on peut la placer
                         putPiece(coord_x, coord_y, piece_bord);
-                        ++position;
-                        generationRecursive(position);
+                        generationRecursive(++position);
                         --position;
                         pickOffPiece(piece_bord.getId(), coord_x, coord_y);
                     }

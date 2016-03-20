@@ -16,7 +16,7 @@ class Generator
 public:
     Generator(Jeu jeu);
 
-    void multipleGeneration();
+    void multipleGeneration(int hamming);
 
     void initGeneration(int x, int y, int hamming);
 
@@ -56,14 +56,13 @@ private:
     bool disponibles[JEU_PIECES_MAX];
     FileOut *file_out;
     int coordonnees[25][3];
-    int corolle_type;
 
     int corolle_size;
     int corolle_hamming;
 
     void diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length);
 
-    void coordinatesCreator(int ori_x, int ori_y);
+    void coordinatesCreator(int ori_x, int ori_y, int hamming);
 
     void addCoordinate(int &position_nb, int x, int y);
 
@@ -82,6 +81,13 @@ private:
     void writeInFile(Corolle &corolle);
 
     void generationRecursive(int &position);
+
+    void genererHamming(int hamming);
+
+    void placerCorolle(int id_pieces[][2], int length_corolle);
+
+    void enleverCorolle(int id_pieces[][2], int length_corolle);
+
 };
 
 
