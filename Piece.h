@@ -43,7 +43,7 @@ public:
 
     int getType();
 
-    void setRotation(int new_rotation);
+    Piece setRotation(int new_rotation);
 
     void setTabCouleur(int *new_tab_couleur);
 

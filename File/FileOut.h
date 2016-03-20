@@ -19,11 +19,14 @@ class FileOut : public FileUtils
 {
 public:
     int size;
+    int corolle_size;
     int corolle_hamming;
-    int corolle_type;
+    int posx;
+    int posy;
     int piece_number;
     int rotation;
-    int corolle_size;
+    int coordonnees[25][3] ;
+
     ofstream fichier;
 
     FileOut()
@@ -32,8 +35,8 @@ public:
     ~FileOut()
     { };
 
-    FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
-            int rotation,int corolle_size);
+    FileOut(int size, int corolle_size, int corolle_hamming, int posx, int posy, int piece_number,
+            int rotation, int coordonnees[25][3]);
 
     void open();
 

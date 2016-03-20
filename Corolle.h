@@ -21,7 +21,8 @@ private:
     Piece pieces[Jeu::JEU_PIECES_MAX];
     int rotation;
     int size;
-    int type;
+    int posx;
+    int posy;
     int hamming;
 
 public:
@@ -50,7 +51,7 @@ public:
 
     Corolle();
 
-    Corolle(const Piece pieces[], int size, int type, int hamming);
+    Corolle(const Piece pieces[], int size, int posx, int posy, int hamming);
 
     Corolle(const Corolle &corolle);
 
@@ -65,7 +66,9 @@ public:
 
     void setRotation(int rotation);
 
-    void setType(int type);
+    void setPosX(int posx);
+
+    void setPosY(int posy);
 
     void setSize(int size);
 
@@ -75,7 +78,9 @@ public:
 
     const int getRotation() const;
 
-    const int getType() const;
+    const int getPosX() const;
+
+    const int getPosY() const;
 
     const int getSize() const;
 
