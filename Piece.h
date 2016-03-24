@@ -26,28 +26,28 @@ public:
     ~Piece()
     { };
 
-    Piece(int i, int couleur[4]);
+    Piece(const int idPiece, int couleur[4]);
 
     const string toString();
 
-    const string toStringDetail();
+    string toStringDetail() const;
 
-    const int getColor(int position);
+    const int getColor(const int position);
 
-    const int getId() const
+    int getId() const
     { return id; };
 
-    int getRotation();
+    const int getRotation();
 
-    int *getTabCouleur();
+    const int *getTabCouleur();
 
-    int getType();
+    const int getType();
 
-    void setRotation(int new_rotation);
+    void setRotation(const int new_rotation);
 
-    void setTabCouleur(int *new_tab_couleur);
+    void setTabCouleur(const int *new_tab_couleur);
 
-    int operator[](int position);
+    int operator[](const int &position);
 
     int rotation;
 

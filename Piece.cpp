@@ -6,8 +6,10 @@ Piece::Piece() : couleur{0, 0, 0, 0}
     rotation = 0;
 }
 
-Piece::Piece(int idPiece, int couleur[4]) : id(idPiece), rotation(0)
+Piece::Piece(const int idPiece, int couleur[4])
 {
+    id = idPiece;
+    rotation = 0;
     for (int i = 0; i < 4; ++i) {
         this->couleur[i] = couleur[i];
     }
@@ -36,7 +38,7 @@ const string Piece::toString()
     return s.str();
 }
 
-const string Piece::toStringDetail()
+string Piece::toStringDetail() const
 {
     ostringstream stream;
     stream << "Pièce n " << id << endl;
@@ -49,7 +51,7 @@ const string Piece::toStringDetail()
 }
 
 
-const int Piece::getColor(int position)
+const int Piece::getColor(const int position)
 {
     if (position > 4) {
         return -1;
@@ -59,35 +61,36 @@ const int Piece::getColor(int position)
 }
 
 //Getters
-int Piece::getRotation()
+const int Piece::getRotation()
 {
     return rotation;
 }
 
-int *Piece::getTabCouleur()
+const int *Piece::getTabCouleur()
 {
     return couleur;
 }
 
-int Piece::getType()
+const int Piece::getType()
 {
     return type;
 }
 
 //Setters
-void Piece::setRotation(int new_rotation)
+void Piece::setRotation(const int new_rotation)
 {
     rotation = new_rotation;
 }
 
-void Piece::setTabCouleur(int new_tab_couleur[4])
+void Piece::setTabCouleur(const int new_tab_couleur[4])
 {
     for (int i = 0; i < 5; ++i) {
         couleur[i] = new_tab_couleur[i];
     }
 }
 
-int Piece::operator[](int position){
+int Piece::operator[](const int &position)
+{
     return getColor(position);
 }
 
