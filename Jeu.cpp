@@ -8,7 +8,7 @@ Jeu::Jeu(const int sizeJeu) : size(sizeJeu)
     nb_pieces_tabI = 0;
 }
 
-int Jeu::addPiece(Piece &p)
+void Jeu::addPiece(Piece &p)
 {
 
     if (nb_pieces_presentes < (size * size)) {

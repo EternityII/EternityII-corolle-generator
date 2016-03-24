@@ -22,7 +22,7 @@ Generator::Generator(Jeu jeu) : jeu(jeu)
  * @param int x
  * @param int y
  */
-const int Generator::pieceTypeByPosition(int x, int y)
+const int Generator::pieceTypeByPosition(const int &x, const int &y)
 {
     //cout << "PieceTypeByPosition" << endl;
     if (x == 0 && y == 0) {
@@ -53,7 +53,7 @@ const int Generator::pieceTypeByPosition(int x, int y)
  * @param int x coordonnées x à verifier
  * @param int y coordonnées y à vérifier
  */
-void Generator::addCoordinate(int &position_nb, int x, int y)
+void Generator::addCoordinate(int &position_nb, const int &x, const int &y)
 {
     if (x >= 0 && x < jeu_size && y >= 0 && y < jeu_size) {
         coordonnees[position_nb][POS_X] = x;
@@ -72,7 +72,7 @@ void Generator::addCoordinate(int &position_nb, int x, int y)
  * @param int direction de la diagonale.
  * @param int length longueur de la diagonale.
  */
-void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length)
+void Generator::diagonalWalker(int &position_nb, int &x, int &y, const int orientation, const int &length)
 {
     if (position_nb < 0 || orientation < 0 || length < 0) {
         perror("Invalid diagonalWalker values");
@@ -111,26 +111,29 @@ void Generator::diagonalWalker(int &position_nb, int &x, int &y, int orientation
  * @param int x coordonnée x d'origine
  * @param int y coordonnée y d'origine
  */
-void Generator::coordinatesCreator(int x, int y)
+void Generator::coordinatesCreator(int x, int y, const int type_parcours)
 {
     int position_nb = 0; // pièce en position 0, Initialisation du parcours
 
-    addCoordinate(position_nb, x, y); // pièce initiale
-    y--;// HAMMING 1
+    if (type_parcours == PARCOURS_COROLLE) {
+        addCoordinate(position_nb, x, y); // pièce initiale
+        y--;// HAMMING 1
 
-    for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {  // HAMMING <= 1 ?
+        for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {  // HAMMING <= 1 ?
 
-        int walking_x = x, walking_y = y;
-        //placement de la pièce NORD qui va initialiser le parcours diagonal.
-        addCoordinate(position_nb, walking_x, walking_y);
-        diagonalWalker(position_nb, walking_x, walking_y, SE, iteration); // Génération des coordonnées vers le SE
-        diagonalWalker(position_nb, walking_x, walking_y, SW, iteration); // vers le SW
-        diagonalWalker(position_nb, walking_x, walking_y, NW, iteration); // vers le NW
-        diagonalWalker(position_nb, walking_x, walking_y, NE, iteration - 1); // vers le NE sans la dernière valeur
-        y--; //On décrémente la position y : on incrémente le hamming
+            int walking_x = x, walking_y = y;
+            //placement de la pièce NORD qui va initialiser le parcours diagonal.
+            addCoordinate(position_nb, walking_x, walking_y);
+            diagonalWalker(position_nb, walking_x, walking_y, SE, iteration); // Génération des coordonnées vers le SE
+            diagonalWalker(position_nb, walking_x, walking_y, SW, iteration); // vers le SW
+            diagonalWalker(position_nb, walking_x, walking_y, NW, iteration); // vers le NW
+            diagonalWalker(position_nb, walking_x, walking_y, NE, iteration - 1); // vers le NE sans la dernière valeur
+            y--; //On décrémente la position y : on incrémente le hamming
+        }
+
+        corolle_size = position_nb; // Taille de la corolle
     }
 
-    corolle_size = position_nb; // Taille de la corolle
 }
 
 /*
@@ -169,7 +172,7 @@ void Generator::multipleGeneration()
  * @param int y coordonnée y de la position initiale
  * @param int hamming hamming de la corolle
  */
-void Generator::initGeneration(int x, int y, int hamming)
+void Generator::initGeneration(const int &x, const int &y, const int hamming)
 {
 
     cout << "# initGeneration(" << x << ", " << y << ", " << hamming << ")" <<
@@ -181,7 +184,7 @@ void Generator::initGeneration(int x, int y, int hamming)
         exit(EXIT_FAILURE);
     }
 
-    coordinatesCreator(x, y);
+    coordinatesCreator(x, y, 0);
 
     for (int i = 0; i < jeu_size * jeu_size; ++i) {
         jeu.getJeu()[i].toStringDetail();
@@ -189,7 +192,10 @@ void Generator::initGeneration(int x, int y, int hamming)
 
     int position = 0; // initialisation du parcours
 
+    clock_t start = clock();
     generationRecursive(position);
+
+    std::cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 
     //if (file_out->isOpen()) {
     //    file_out->close(); //fermeture eventuels des fichiers ouverts
@@ -204,7 +210,7 @@ void Generator::initGeneration(int x, int y, int hamming)
  * @param int side_a le bord a comparer de la pièce a
  * @param int side_b le bord a comparer de la pièce b
  */
-const bool Generator::compareColors(Piece a, Piece b, int side_a, int side_b)
+const bool Generator::compareColors(Piece &a, Piece &b, const int side_a, const int side_b)
 {
     return a.getColor(side_a) == b.getColor(side_b);
 }
@@ -214,7 +220,7 @@ const bool Generator::compareColors(Piece a, Piece b, int side_a, int side_b)
  *
  * @return true si le les bords correspondent ou si le voisin est vide
  */
-const bool Generator::compareSides(Piece piece, int x, int y, int side_to_compare)
+const bool Generator::compareSides(Piece &piece, const int &x, const int &y, const int side_to_compare)
 {
     if (side_to_compare == Piece::TOP && y > 0) { // on verifie en haut
         if (plateau[x][y - 1].getId() == -1) {
@@ -249,7 +255,7 @@ const bool Generator::compareSides(Piece piece, int x, int y, int side_to_compar
 /**
  * Vérifie si on peut mettre la pièce sur le plateau
  */
-const bool Generator::canPutPiece(Piece piece, int x, int y, int position_type)
+const bool Generator::canPutPiece(Piece &piece, const int &x, const int &y, const int position_type)
 {
     if (position_type > POS_TYPE_BORD) { //POS_TYPE_BORD_* on verifie les cotés non-bord
         bool can_put_piece = true; // on suppose que ca marche de base XD
@@ -291,7 +297,7 @@ const bool Generator::canPutPiece(Piece piece, int x, int y, int position_type)
 /**
  * Met la piece sur le plateau
  */
-void Generator::putPiece(int x, int y, Piece piece)
+void Generator::putPiece(const int &x, const int &y, Piece &piece)
 {
     putPieceEvent();
     plateau[x][y] = piece;
@@ -301,7 +307,7 @@ void Generator::putPiece(int x, int y, Piece piece)
 /**
  * Enleve la piece du plateau
  */
-void Generator::pickOffPiece(int numero_piece, int x, int y)
+void Generator::pickOffPiece(const int &numero_piece, const int &x, const int &y)
 {
     pickOffPieceEvent();
     Piece piece_vide;
@@ -424,7 +430,7 @@ void Generator::generationRecursive(int &position)
 // Evenements
 void Generator::putPieceEvent()
 {
-    nb_noeuds ++;
+    nb_noeuds++;
 }
 
 void Generator::pickOffPieceEvent()
@@ -434,5 +440,10 @@ void Generator::pickOffPieceEvent()
 
 void Generator::solutionFoundEvent()
 {
-    nb_solutions ++;
+    nb_solutions++;
+}
+
+void Generator::parcoursBruteForce(const int &type_parcours)
+{
+
 }

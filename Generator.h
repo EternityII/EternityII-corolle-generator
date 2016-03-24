@@ -6,10 +6,12 @@
 #define GENERATOR_H
 
 #include <stdlib.h>
+#include <time.h>
 
 #include "Jeu.h"
 #include "Corolle.h"
 #include "File/FileOut.h"
+
 
 class Generator
 {
@@ -18,7 +20,9 @@ public:
 
     void multipleGeneration();
 
-    void initGeneration(int x, int y, int hamming);
+    void initGeneration(const int &x, const int &y, const int hamming);
+
+    void parcoursBruteForce(const int &type_parcours);
 
 private:
 
@@ -48,6 +52,10 @@ private:
     static const int NW = 2;
     static const int NE = 3;
 
+    static const int PARCOURS_COROLLE = 0;
+    static const int PARCOURS_ROW = 1;
+    static const int PARCOURS_DIAGONAL = 2;
+
     Jeu jeu;
 
     int jeu_size;
@@ -56,31 +64,30 @@ private:
     bool disponibles[JEU_PIECES_MAX];
     FileOut *file_out;
     int coordonnees[25][3];
-    int corolle_type;
 
     int corolle_size;
     int corolle_hamming;
 
-    int nb_noeuds;
-    int nb_solutions;
+    long long nb_noeuds;
+    long long nb_solutions;
 
-    void diagonalWalker(int &position_nb, int &x, int &y, int orientation, int length);
+    void diagonalWalker(int &position_nb, int &x, int &y, const int orientation, const int &length);
 
-    void coordinatesCreator(int ori_x, int ori_y);
+    void coordinatesCreator(int x, int y, const int type_parcours);
 
-    void addCoordinate(int &position_nb, int x, int y);
+    void addCoordinate(int &position_nb, const int &x, const int &y);
 
-    const int pieceTypeByPosition(int x, int y);
+    const int pieceTypeByPosition(const int &x, const int &y);
 
-    static const bool compareColors(Piece a, Piece b, int side_a, int side_b);
+    const bool compareColors(Piece &a, Piece &b, const int side_a, const int side_b);
 
-    const bool compareSides(Piece piece, int x, int y, int side_to_compare);
+    const bool compareSides(Piece &piece, const int &x, const int &y, const int side_to_compare);
 
-    const bool canPutPiece(Piece piece, int x, int y, int position_type);
+    const bool canPutPiece(Piece &piece, const int &x, const int &y, const int position_type);
 
-    void putPiece(int x, int y, Piece piece);
+    void putPiece(const int &x, const int &y, Piece &piece);
 
-    void pickOffPiece(int numero_piece, int x, int y);
+    void pickOffPiece(const int &numero_piece, const int &x, const int &y);
 
     void writeInFile(Corolle &corolle);
 

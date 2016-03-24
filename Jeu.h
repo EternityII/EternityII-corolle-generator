@@ -20,7 +20,7 @@ public:
     ~Jeu()
     { }
 
-    int addPiece(Piece &p); //Ajout d'une piece dans le jeu
+    void addPiece(Piece &p); //Ajout d'une piece dans le jeu
 
     //Getters
     int getSize();
