@@ -1,3 +1,9 @@
+**Deplacé dans une repo à part:** [cEternity-doc][]
+
+[cEternity-doc]: https://gitlab.info-ufr.univ-montp2.fr/fati.chen/cEternity-doc
+
+--- 
+
 # Comptes rendus
 
 [Compte rendu de la réunion du 02.02.2016](compte_rendu_reunion-2016.02.02.md)
