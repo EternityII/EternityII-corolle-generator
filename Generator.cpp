@@ -142,17 +142,15 @@ void Generator::coordinatesCreator(int x, int y, const int type_parcours)
 void Generator::multipleGeneration()
 {
     cout << "multipleGeneration()" << endl;
-    int y = 0;
     int reduc;
     if (jeu_size % 2 == 1) {
         reduc = ((jeu_size - 1) / 2) + 1;
     } else {
         reduc = jeu_size / 2;
     }
-
-    for (int j = 0; j < reduc; j++) {
-        for (int i = y; i < reduc; i++) {
-            for (int hamming = 1; hamming < 4; hamming++) {
+    for (int j = 1; j < 2; j++) {
+        for (int i = 1; i < 2; i++) {
+            for (int hamming = 2; hamming < 3; hamming++) {
                 nb_noeuds = 0;
                 nb_solutions = 0;
 
@@ -162,7 +160,6 @@ void Generator::multipleGeneration()
                 cout << "nombre de solutions " << nb_solutions << endl;
             }
         }
-        y++;
     }
 }
 

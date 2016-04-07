@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 
-    FileIn file_in("assets/pieces_6x6.txt");
+    FileIn file_in("assets/pieces_10x10.txt");
     Jeu jeu = file_in.initJeu();
     cout << "Color" << jeu.getJeu()[3][3] << endl;
     cout << "Color" << jeu.getSize() << endl;
