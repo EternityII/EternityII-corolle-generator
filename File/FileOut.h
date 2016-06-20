@@ -15,7 +15,7 @@ using namespace std;
 #include "../Corolle.h"
 #include "FileUtils.h"
 
-class FileOut : public FileUtils
+class FileOut: public FileUtils
 {
 public:
     int size;
@@ -24,7 +24,7 @@ public:
     int piece_number;
     int rotation;
     int corolle_size;
-    ofstream fichier;
+    fstream fichier;
 
     FileOut()
     { };
@@ -33,7 +33,7 @@ public:
     { };
 
     FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
-            int rotation,int corolle_size);
+        int rotation, int corolle_size);
 
     void open();
 
@@ -45,6 +45,7 @@ public:
     void close();
 
     const string getFileName() const;
+    void put(Corolle &corolle, string &append);
 };
 
 #endif //FILEOUT_H

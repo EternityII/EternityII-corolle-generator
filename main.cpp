@@ -1,19 +1,23 @@
 #include <iostream>
 
-using namespace std;
-
 #include "Corolle.h"
 #include "Generator.h"
 #include "File/FileIn.h"
 
+using namespace std;
+
 int main()
 {
-
-    FileIn file_in("assets/pieces_10x10.txt");
-    Jeu jeu = file_in.initJeu();
-    cout << "Color" << jeu.getJeu()[3][3] << endl;
-    cout << "Color" << jeu.getSize() << endl;
-
-    Generator generator(jeu);
-    generator.multipleGeneration(); //Génère toutes les corolles possible pour une taille de plateau.
+    for (int i = 4; i < 11; ++i) {
+        string str = "./assets/pieces_";
+        str += to_string(i);
+        str += "x";
+        str += to_string(i);
+        str += ".txt";
+        FileIn file_in(str);
+        Jeu jeu = file_in.initJeu();
+        Generator generator(jeu);
+        generator.multipleGeneration(); //Génère toutes les corolles possible pour une taille de plateau.
+    }
+    return 0;
 }

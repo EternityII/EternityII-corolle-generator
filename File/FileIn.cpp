@@ -9,7 +9,7 @@ FileIn::FileIn(int taille) : size(taille)
     path_file = getFileName();
 }
 
-FileIn::FileIn(string path) : path_file(path)
+FileIn::FileIn(string &path) : path_file(path)
 {
 
 }

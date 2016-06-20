@@ -70,6 +70,7 @@ private:
 
     long long nb_noeuds;
     long long nb_solutions;
+    long long nb_solutions_max;
 
     void diagonalWalker(int &position_nb, int &x, int &y, const int orientation, const int &length);
 
@@ -98,6 +99,7 @@ private:
     void pickOffPieceEvent();
 
     void solutionFoundEvent();
+    void writeInFile(Corolle &corolle, string &append);
 };
 
 

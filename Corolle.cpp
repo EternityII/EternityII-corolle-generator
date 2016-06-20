@@ -28,7 +28,7 @@ const string Corolle::toString()
 {
     ostringstream output;
     for (int i = 0; i < size; ++i) {
-        output << pieces[i].toString() << " ";
+        output << pieces[i].toString() << ";";
     }
     return output.str();
 }

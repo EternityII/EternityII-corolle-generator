@@ -16,10 +16,10 @@ public:
     static const int COIN = 2;
 
     //Rotation
-    static const int TOP = 0;
-    static const int RIGHT = 1;
-    static const int BOTTOM = 2;
-    static const int LEFT = 3;
+    static const int TOP = 1;
+    static const int RIGHT = 2;
+    static const int BOTTOM = 3;
+    static const int LEFT = 0;
 
     Piece();
 

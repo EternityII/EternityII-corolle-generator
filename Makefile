@@ -9,6 +9,8 @@ main : $(OBJECTS)
 %.o : %.cpp %.h
 	$(CC) $(FLAGS) -o $@ -c $<
 
+%.o : %.cpp
+	$(CC) $(FLAGS) -o $@ -c $<
 
 clean :
 	rm -f *~ *.o main

@@ -1,6 +1,7 @@
 #include "Piece.h"
 
-Piece::Piece() : couleur{0, 0, 0, 0}
+Piece::Piece()
+    : couleur{0, 0, 0, 0}
 {
     id = -1;
     rotation = 0;
@@ -34,7 +35,7 @@ Piece::Piece(const int idPiece, int couleur[4])
 const string Piece::toString()
 {
     ostringstream s;
-    s << id;
+    s << id << ":" << (4 - rotation) % 4;
     return s.str();
 }
 
@@ -49,7 +50,6 @@ string Piece::toStringDetail() const
 
     return stream.str();
 }
-
 
 const int Piece::getColor(const int position)
 {
