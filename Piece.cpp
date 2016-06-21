@@ -4,7 +4,7 @@ Piece::Piece()
     : couleur{0, 0, 0, 0}
 {
     id = -1;
-    rotation = 0;
+    rotation = -1;
 }
 
 Piece::Piece(const int idPiece, int couleur[4])
@@ -34,9 +34,13 @@ Piece::Piece(const int idPiece, int couleur[4])
 
 const string Piece::toString()
 {
-    ostringstream s;
-    s << id << ":" << (4 - rotation) % 4;
-    return s.str();
+    string s;
+    s = to_string(id);
+    if (rotation != -1) {
+        s += ":";
+        s += to_string((4 - rotation) % 4);
+    }
+    return s;
 }
 
 string Piece::toStringDetail() const

@@ -60,8 +60,10 @@ void Generator::addCoordinate(int &position_nb, const int &x, const int &y)
         coordonnees[position_nb][POS_X] = x;
         coordonnees[position_nb][POS_Y] = y;
         coordonnees[position_nb][POS_TYPE] = pieceTypeByPosition(x, y);
-        position_nb++;
+    } else {
+        coordonnees[position_nb][POS_TYPE] = POS_TYPE_EXT;
     }
+    position_nb++;
 }
 
 /**
@@ -118,18 +120,18 @@ void Generator::coordinatesCreator(int x, int y, const int type_parcours)
 
     if (type_parcours == PARCOURS_COROLLE) {
         addCoordinate(position_nb, x, y); // pièce initiale
-        y--;// HAMMING 1
+        x++;// HAMMING 1
 
         for (int iteration = 1; iteration <= corolle_hamming; ++iteration) {  // HAMMING <= 1 ?
 
             int walking_x = x, walking_y = y;
             //placement de la pièce NORD qui va initialiser le parcours diagonal.
             addCoordinate(position_nb, walking_x, walking_y);
-            diagonalWalker(position_nb, walking_x, walking_y, SE, iteration); // Génération des coordonnées vers le SE
-            diagonalWalker(position_nb, walking_x, walking_y, SW, iteration); // vers le SW
-            diagonalWalker(position_nb, walking_x, walking_y, NW, iteration); // vers le NW
-            diagonalWalker(position_nb, walking_x, walking_y, NE, iteration - 1); // vers le NE sans la dernière valeur
-            y--; //On décrémente la position y : on incrémente le hamming
+            diagonalWalker(position_nb, walking_x, walking_y, SW, iteration); // Génération des coordonnées vers le SE
+            diagonalWalker(position_nb, walking_x, walking_y, NW, iteration); // vers le SW
+            diagonalWalker(position_nb, walking_x, walking_y, NE, iteration); // vers le NW
+            diagonalWalker(position_nb, walking_x, walking_y, SE, iteration - 1); // vers le NE sans la dernière valeur
+            x++; //On décrémente la position y : on incrémente le hamming
         }
 
         corolle_size = position_nb; // Taille de la corolle
@@ -158,7 +160,7 @@ void Generator::multipleGeneration()
 
         initGeneration(0, 0, hamming);
 
-        cout <<  "taille de l'arbre " << nb_noeuds << endl;
+        cout << "taille de l'arbre " << nb_noeuds << endl;
         cout << "nombre de solutions " << nb_solutions << endl;
     }
 //}
@@ -327,14 +329,24 @@ void Generator::writeInFile(Corolle &corolle, string &append)
 
             delete file_out;
 
-            file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-                corolle.getRotation(), corolle_size);
+            file_out = new FileOut(jeu_size,
+                corolle.getHamming(),
+                corolle.getOriX(),
+                corolle.getOriY(),
+                corolle.getPieces()[0].getId(),
+                corolle.getRotation(),
+                corolle_size);
             file_out->open();
             file_out->put(corolle, append);
         }
     } else {// si aucun fichier n'est ouvert, on ouvre le bon
-        file_out = new FileOut(jeu_size, corolle.getHamming(), corolle.getType(), corolle.getPieces()[0].getId(),
-            corolle.getRotation(), corolle_size);
+        file_out = new FileOut(jeu_size,
+            corolle.getHamming(),
+            corolle.getOriX(),
+            corolle.getOriY(),
+            corolle.getPieces()[0].getId(),
+            corolle.getRotation(),
+            corolle_size);
         file_out->open();
         file_out->put(corolle, append);
     }
@@ -351,7 +363,10 @@ void Generator::generationRecursive(int &position)
             coord_x = coordonnees[position][POS_X],
             coord_y = coordonnees[position][POS_Y];
 
-        if (position_type < POS_TYPE_COIN) { // si position est un coin
+        if (position_type == POS_TYPE_EXT) {
+            generationRecursive(++position);
+            --position;
+        } else if (position_type < POS_TYPE_COIN) { // si position est un coin
             for (int numero_piece = 0; numero_piece < 4; numero_piece++) { // parcours des coins
 
                 Piece piece_coin = jeu.getTabC()[numero_piece];
@@ -424,27 +439,107 @@ void Generator::generationRecursive(int &position)
     } else if (position == corolle_size) {
         Piece pieces[position];
         for (int i = 0; i < position; ++i) {
-            pieces[i] = plateau[coordonnees[i][POS_X]][coordonnees[i][POS_Y]];
-            //  cout << pieces[i].toStringDetail();
+            if (coordonnees[i][POS_TYPE] != POS_TYPE_EXT) {
+                pieces[i] = plateau[coordonnees[i][POS_X]][coordonnees[i][POS_Y]];
+                //  cout << pieces[i].toStringDetail();
+            }
         }
 
-        string frontiere = "";
-        int taille = jeu.getSize();
-        int taille_m = jeu.getSize() - 1;
-        int sum_vert = taille * taille_m;
+        string frontiere;
 
-        for (int y = 0, x = corolle_hamming; y <= corolle_hamming; ++y, --x) {
+        int x_ori = coordonnees[0][POS_X];
+        int y_ori = coordonnees[0][POS_Y];
+        int x = corolle_hamming + x_ori;
+        int y = y_ori;
+
+        for (; y < corolle_hamming + y_ori; ++y, --x) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += "-1;-1;";
+            } else {
+                frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
+                frontiere += ";";
+                frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+                frontiere += ";";
+            }
+        }
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;-1;";
+        } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
-            frontiere += ":";
-            frontiere += to_string((y * taille_m) + x);
             frontiere += ";";
             frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
-            frontiere += ":";
-            frontiere += to_string(sum_vert + x + (y * taille));
             frontiere += ";";
         }
 
-        Corolle corolle(pieces, position, Corolle::C, corolle_hamming);
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;";
+        } else {
+            frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+            frontiere += ";";
+        }
+        --y, --x;
+        for (; y > y_ori; --y, --x) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += "-1;-1;";
+            } else {
+                frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+                frontiere += ";";
+                frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+                frontiere += ";";
+            }
+        }
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;";
+        } else {
+            frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+            frontiere += ";";
+        }
+
+        for (; x < x_ori; --y, ++x) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += "-1;-1;";
+            } else {
+                frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+                frontiere += ";";
+                frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+                frontiere += ";";
+            }
+        }
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;-1;";
+        } else {
+            frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+            frontiere += ";";
+            frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+            frontiere += ";";
+        }
+
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;";
+        } else {
+            frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
+            frontiere += ";";
+        }
+        ++x, ++y;
+        for (; y < y_ori; ++y, ++x) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += "-1;-1;";
+            } else {
+
+                frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+                frontiere += ";";
+                frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
+                frontiere += ";";
+            }
+        }
+        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+            frontiere += "-1;";
+        } else {
+            frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+            frontiere += ";";
+        }
+
+        Corolle corolle(pieces, position, x_ori, y_ori, corolle_hamming);
 
         writeInFile(corolle, frontiere);
         solutionFoundEvent();

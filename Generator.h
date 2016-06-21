@@ -35,6 +35,7 @@ private:
     static const int POS_TYPE_COIN_SE = 3;
     static const int POS_TYPE_COIN_SW = 4;
     static const int POS_TYPE_COIN = 5;
+    static const int POS_TYPE_EXT = 7;
 
     static const int POS_TYPE_BORD = 10;
     static const int POS_TYPE_BORD_TOP = 11;

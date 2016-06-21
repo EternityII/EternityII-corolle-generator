@@ -20,7 +20,8 @@ class FileOut: public FileUtils
 public:
     int size;
     int corolle_hamming;
-    int corolle_type;
+    int corolle_x;
+    int corolle_y;
     int piece_number;
     int rotation;
     int corolle_size;
@@ -32,7 +33,7 @@ public:
     ~FileOut()
     { };
 
-    FileOut(int size, int corolle_hamming, int corolle_type, int piece_number,
+    FileOut(int size, int corolle_hamming, int corolle_x, int corolle_y, int piece_number,
         int rotation, int corolle_size);
 
     void open();
