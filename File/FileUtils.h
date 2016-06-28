@@ -15,7 +15,8 @@ private:
 public:
     FileUtils();
 
-    virtual const string getFileName();
+    virtual const string getFileName()
+    { return ""; };
 };
 
 #endif //FILEUTILS_H

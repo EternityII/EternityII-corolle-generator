@@ -6,6 +6,3 @@ using namespace std;
 
 FileUtils::FileUtils()
 { };
-
-const string FileUtils::getFileName()
-{ }

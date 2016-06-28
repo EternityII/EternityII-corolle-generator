@@ -142,29 +142,41 @@ void Generator::coordinatesCreator(int x, int y, const int type_parcours)
 /*
 * Initialise la génération multiple de toutes les corolles possibles en fonction de la taille du jeu
 */
-void Generator::multipleGeneration()
+void Generator::multipleGeneration(const int end /*= 1*/, const int begin /*= 3*/)
 {
     cout << "multipleGeneration()" << endl;
-//    int reduc;
-//    if (jeu_size % 2 == 1) {
-//        reduc = ((jeu_size - 1) / 2) + 1;
-//    } else {
-//        reduc = jeu_size / 2;
-//    }
-    // for (int j = 0; j < reduc; j++) {
-    //    for (int i = 0; i < reduc; i++) {
-    for (int hamming = 1; hamming < 3; hamming++) {
-        nb_noeuds = 0;
-        nb_solutions = 0;
-        nb_solutions_max = 1;
 
-        initGeneration(0, 0, hamming);
+    int middle = (jeu_size + jeu_size % 2) / 2;
 
-        cout << "taille de l'arbre " << nb_noeuds << endl;
-        cout << "nombre de solutions " << nb_solutions << endl;
+    // fait le 9x9 ou moins si pas possible
+    for (int hamming = begin; hamming <= end; hamming++) {
+        for (int x = 0; x < hamming + 1 && x < middle; ++x) {
+            for (int y = 0; y < hamming + 1 && y < middle; ++y) {
+                nb_noeuds = 0;
+                nb_solutions = 0;
+                nb_solutions_max = 1;
+
+                initGeneration(x, y, hamming);
+
+                cout << "taille de l'arbre " << nb_noeuds << endl;
+                cout << "nombre de solutions " << nb_solutions << endl;
+            }
+        }
+
+        if (middle >= hamming + 2) {
+            int x = hamming;
+            for (int y = 0; y < hamming + 2; ++y) {
+                nb_noeuds = 0;
+                nb_solutions = 0;
+                nb_solutions_max = 1;
+
+                initGeneration(x, y, hamming);
+
+                cout << "taille de l'arbre " << nb_noeuds << endl;
+                cout << "nombre de solutions " << nb_solutions << endl;
+            }
+        }
     }
-//}
-//}
 }
 
 /**

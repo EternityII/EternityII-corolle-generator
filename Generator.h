@@ -18,7 +18,7 @@ class Generator
 public:
     Generator(Jeu jeu);
 
-    void multipleGeneration();
+    void multipleGeneration(const int end = 3, const int begin = 1);
 
     void initGeneration(const int &x, const int &y, const int hamming);
 

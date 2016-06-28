@@ -22,8 +22,8 @@ void FileOut::open()
     mkdir(create_dir.str().c_str(), 0777);
 
     fichier.open(getFileName().c_str(), ofstream::out | ofstream::trunc);
-    fichier << "# taille n°piece rotation x y hamming nb_pieces" << endl;
-    fichier << "# " << size << " "
+    fichier << "# taille rotation_corolle n°piece rotation x y hamming nb_pieces" << endl;
+    fichier << "# " << size << " 0 "
         << piece_number << " "
         << rotation << " "
         << corolle_x << " "
@@ -57,7 +57,7 @@ void FileOut::close()
 const string FileOut::getFileName() const
 {
     ostringstream output;
-    output << "./output/" << size << "/N(" << size << ")_P(" << piece_number << ":" << rotation << ")_Z(" << corolle_x
+    output << "./output/" << size << "/N(" << size << ")_C(0)_P(" << piece_number << ":" << rotation << ")_Z(" << corolle_x
         << "," << corolle_y
         << ")_H("
         << corolle_hamming << ").txt";
