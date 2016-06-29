@@ -164,7 +164,7 @@ void Generator::multipleGeneration(const int end /*= 1*/, const int begin /*= 3*
         }
 
         if (middle >= hamming + 2) {
-            int x = hamming;
+            int x = hamming+1;
             for (int y = 0; y < hamming + 2; ++y) {
                 nb_noeuds = 0;
                 nb_solutions = 0;

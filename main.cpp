@@ -16,9 +16,9 @@ int main(int argc, const char *argv[])
         Generator generator(jeu);
 
         if (argc > 2) {
-            generator.multipleGeneration(atoi(argv[2]), 1);
+            generator.multipleGeneration(atoi(argv[2]));
         } else {
-            generator.multipleGeneration(2, 1); //Génère toutes les corolles possible pour une taille de plateau
+            generator.multipleGeneration(2); //Génère toutes les corolles possible pour une taille de plateau
         }
 
         return 0;
