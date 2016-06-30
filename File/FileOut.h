@@ -46,7 +46,7 @@ public:
     void close();
 
     const string getFileName() const;
-    void put(Corolle &corolle, string &append);
+    void put(Corolle &corolle, string &append, int &lastdepth);
 };
 
 #endif //FILEOUT_H

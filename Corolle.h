@@ -76,7 +76,7 @@ public:
 
     const int getSize() const;
 
-    const string toString();
+    const string toString(const int &lastdepth);
 
     const int getOriX() const;
     const int getOriY() const;

@@ -93,14 +93,14 @@ private:
 
     void writeInFile(Corolle &corolle);
 
-    void generationRecursive(int &position);
+    void generationRecursive(int &position, int &lastdepth);
 
     void putPieceEvent();
 
     void pickOffPieceEvent();
 
     void solutionFoundEvent();
-    void writeInFile(Corolle &corolle, string &append);
+    void writeInFile(Corolle &corolle, string &append, int &lastdepth);
 };
 
 

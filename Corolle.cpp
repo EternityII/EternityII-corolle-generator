@@ -26,11 +26,11 @@ Corolle::Corolle(const Corolle &corolle)
     Corolle(corolle.getPieces(), corolle.getSize(), corolle.getOriX(), corolle.getOriY(), corolle.getHamming());
 }
 
-const string Corolle::toString()
+const string Corolle::toString(const int &lastdepth)
 {
     ostringstream output;
-    for (int i = 0; i < size; ++i) {
-        output << pieces[i].toString() << ";";
+    for (int i = lastdepth; i < size; ++i) {
+        output << "\n" << i << ">" << pieces[i].toString();
     }
     return output.str();
 }
