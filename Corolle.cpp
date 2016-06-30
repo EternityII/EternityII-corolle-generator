@@ -18,7 +18,7 @@ Corolle::Corolle(const Piece pieces[], int size, int ori_x, int ori_y, int hammi
         this->pieces[i] = pieces[i];
     }
 
-    rotation = pieces[0].rotation;
+    rotation = (4 - pieces[0].rotation) % 4;
 }
 
 Corolle::Corolle(const Corolle &corolle)
