@@ -509,7 +509,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
                 frontiere += ";";
-                frontiere += to_char(plateau[x][y].getColor(Piece::LEFT));
+                frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
                 frontiere += ";";
             }
         }
