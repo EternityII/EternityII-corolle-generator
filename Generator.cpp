@@ -378,8 +378,10 @@ void Generator::generationRecursive(int &position, int &lastdepth)
 
         if (position_type == POS_TYPE_EXT) {
             generationRecursive(++position, lastdepth);
-            --lastdepth;
             --position;
+            if (position < lastdepth) {
+                lastdepth = position;
+            }
         } else if (position_type < POS_TYPE_COIN) { // si position est un coin
             for (int numero_piece = 0; numero_piece < 4; numero_piece++) { // parcours des coins
 
@@ -399,8 +401,10 @@ void Generator::generationRecursive(int &position, int &lastdepth)
                     if (canPutPiece(piece_coin, coord_x, coord_y, position_type)) { // vérifie si la piece est placable
                         putPiece(coord_x, coord_y, piece_coin);
                         generationRecursive(++position, lastdepth);
-                        --lastdepth;
                         --position;
+                        if (position < lastdepth) {
+                            lastdepth = position;
+                        }
                         pickOffPiece(piece_coin.getId(), coord_x, coord_y);
                     }
                 }
@@ -426,8 +430,10 @@ void Generator::generationRecursive(int &position, int &lastdepth)
                     if (canPutPiece(piece_bord, coord_x, coord_y, position_type)) { // verifie si on peut la placer
                         putPiece(coord_x, coord_y, piece_bord);
                         generationRecursive(++position, lastdepth);
-                        --lastdepth;
                         --position;
+                        if (position < lastdepth) {
+                            lastdepth = position;
+                        }
                         pickOffPiece(piece_bord.getId(), coord_x, coord_y);
                     }
                 }
@@ -445,8 +451,10 @@ void Generator::generationRecursive(int &position, int &lastdepth)
                         if (canPutPiece(piece_interieur, coord_x, coord_y, position_type)) {// si la piece est placable
                             putPiece(coord_x, coord_y, piece_interieur);
                             generationRecursive(++position, lastdepth);
-                            --lastdepth;
                             --position; // fin de la corolle dépilage
+                            if (position < lastdepth) {
+                                lastdepth = position;
+                            }
                             pickOffPiece(piece_interieur.getId(), coord_x, coord_y);
                         }
                     }
@@ -462,7 +470,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
             }
         }
 
-        string frontiere = ";";
+        string frontiere = "|";
 
         int x_ori = coordonnees[0][POS_X];
         int y_ori = coordonnees[0][POS_Y];
@@ -471,7 +479,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
 
         for (; y < corolle_hamming + y_ori; ++y, --x) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += "-1;-1;";
+                frontiere += ";;";
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
                 frontiere += ";";
@@ -480,7 +488,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
             }
         }
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;-1;";
+            frontiere += ";;";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
             frontiere += ";";
@@ -489,7 +497,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
         }
 
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;";
+            frontiere += ";";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
             frontiere += ";";
@@ -497,16 +505,16 @@ void Generator::generationRecursive(int &position, int &lastdepth)
         --y, --x;
         for (; y > y_ori; --y, --x) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += "-1;-1;";
+                frontiere += ";;";
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
                 frontiere += ";";
-                frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+                frontiere += to_char(plateau[x][y].getColor(Piece::LEFT));
                 frontiere += ";";
             }
         }
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;";
+            frontiere += ";";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
             frontiere += ";";
@@ -514,7 +522,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
 
         for (; x < x_ori; --y, ++x) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += "-1;-1;";
+                frontiere += ";;";
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
                 frontiere += ";";
@@ -523,7 +531,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
             }
         }
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;-1;";
+            frontiere += ";;";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
             frontiere += ";";
@@ -532,7 +540,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
         }
 
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;";
+            frontiere += ";";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
             frontiere += ";";
@@ -540,7 +548,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
         ++x, ++y;
         for (; y < y_ori; ++y, ++x) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += "-1;-1;";
+                frontiere += ";;";
             } else {
 
                 frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
@@ -550,7 +558,7 @@ void Generator::generationRecursive(int &position, int &lastdepth)
             }
         }
         if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += "-1;";
+            frontiere += ";";
         } else {
             frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
             frontiere += ";";

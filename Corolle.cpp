@@ -1,3 +1,4 @@
+#include <complex>
 #include "Corolle.h"
 
 using namespace std;
@@ -29,10 +30,23 @@ Corolle::Corolle(const Corolle &corolle)
 const string Corolle::toString(const int &lastdepth)
 {
     ostringstream output;
-    for (int i = lastdepth; i < size; ++i) {
-        output << "\n" << i << ">" << pieces[i].toString();
+
+    int j = lastdepth;
+    while (pieces[j].getId() == -1 && j < size) {
+        ++j;
+    }
+
+    if (j < size) {
+        output << "\n" << lastdepth << ">";
+        for (int i = j; i < size; ++i) {
+            if (pieces[i].getId() != -1) {
+                output << pieces[i].toString();
+            }
+            output << ";";
+        }
     }
     return output.str();
+
 }
 
 
