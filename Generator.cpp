@@ -476,92 +476,107 @@ void Generator::generationRecursive(int &position, int &lastdepth)
         int y_ori = coordonnees[0][POS_Y];
         int x = corolle_hamming + x_ori;
         int y = y_ori;
+        int cpt = 2 * corolle_hamming * (corolle_hamming - 1) + 1;
 
-        for (; y < corolle_hamming + y_ori; ++y, --x) {
+        for (; y < corolle_hamming + y_ori; ++y, --x, ++cpt) {
+            if (cpt >= lastdepth) {
+                if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                    frontiere += ";;";
+                } else {
+                    frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
+                    frontiere += ";";
+                    frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+                    frontiere += ";";
+                }
+            }
+
+        }
+
+        if (cpt >= lastdepth) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += ";;";
+                frontiere += ";;;";
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
                 frontiere += ";";
-                frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
-                frontiere += ";";
-            }
-        }
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";;";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
-            frontiere += ";";
-            frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
-            frontiere += ";";
-        }
-
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
-            frontiere += ";";
-        }
-        --y, --x;
-        for (; y > y_ori; --y, --x) {
-            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += ";;";
-            } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
                 frontiere += ";";
                 frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
                 frontiere += ";";
             }
         }
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
-            frontiere += ";";
+        --y, --x, ++cpt;
+
+        for (; y > y_ori; --y, --x, ++cpt) {
+            if (cpt >= lastdepth) {
+                if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                    frontiere += ";;";
+                } else {
+                    frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+                    frontiere += ";";
+                    frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+                    frontiere += ";";
+                }
+            }
         }
 
-        for (; x < x_ori; --y, ++x) {
+        if (cpt >= lastdepth) {
             if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += ";;";
+                frontiere += ";";
+            } else {
+                frontiere += to_string(plateau[x][y].getColor(Piece::BOTTOM));
+                frontiere += ";";
+            }
+        }
+
+        for (; x < x_ori; --y, ++x, ++cpt) {
+            if (cpt >= lastdepth) {
+                if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                    frontiere += ";;";
+                } else {
+                    frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
+                    frontiere += ";";
+                    frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+                    frontiere += ";";
+                }
+            }
+        }
+
+        if (cpt >= lastdepth) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += ";;;";
             } else {
                 frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
                 frontiere += ";";
                 frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
                 frontiere += ";";
-            }
-        }
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";;";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::LEFT));
-            frontiere += ";";
-            frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
-            frontiere += ";";
-        }
-
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
-            frontiere += ";";
-        }
-        ++x, ++y;
-        for (; y < y_ori; ++y, ++x) {
-            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-                frontiere += ";;";
-            } else {
-
-                frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
-                frontiere += ";";
                 frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
                 frontiere += ";";
+
             }
         }
-        if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
-            frontiere += ";";
-        } else {
-            frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
-            frontiere += ";";
+
+        ++x, ++y, ++cpt;
+        for (; y < y_ori; ++y, ++x, ++cpt) {
+            if (cpt >= lastdepth) {
+                if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                    frontiere += ";;";
+                } else {
+
+                    frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+                    frontiere += ";";
+                    frontiere += to_string(plateau[x][y].getColor(Piece::RIGHT));
+                    frontiere += ";";
+                }
+            }
+        }
+
+        if (cpt >= lastdepth) {
+            if (x >= jeu_size || y >= jeu_size || x < 0 || y < 0) {
+                frontiere += ";";
+            } else {
+                frontiere += to_string(plateau[x][y].getColor(Piece::TOP));
+                frontiere += ";";
+            }
         }
 
         Corolle corolle(pieces, position, x_ori, y_ori, corolle_hamming);

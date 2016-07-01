@@ -36,15 +36,9 @@ const string Piece::toString()
 {
     string s;
     s = to_string(id);
-
-    if (rotation == 0) {
-        s += "l";
-    } else if (rotation == 1) {
-        s += "b";
-    } else if (rotation == 2) {
-        s += "r";
-    } else if (rotation == 3) {
-        s += "t";
+    if (rotation != -1) {
+        s += ":";
+        s += to_string((4 - rotation) % 4);
     }
 
     return s;
